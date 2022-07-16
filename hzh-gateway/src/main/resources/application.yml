@@ -1,0 +1,60 @@
+server:
+  port: 8001
+logging:
+  level:
+    cn.itcast: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: 192.168.65.131:8848 # nacos地址
+      discovery:
+        namespace: 14be9d75-e2d3-4d73-9db1-65ef410240b4
+    gateway:
+      routes:
+        - id: user-service # 路由标示，必须唯一
+          uri: lb://userservice # 路由的目标地址 服务名称前缀 lb:
+          predicates: # 路由断言，判断请求是否符合规则
+            - Path=/hzh-user/** # 路径断言，判断路径是否是以/user开头，如果是则符合
+
+        - id: event-service # 路由标示，必须唯一
+            uri: lb://eventservice # 路由的目标地址 服务名称前缀 lb:
+            predicates: # 路由断言，判断请求是否符合规则
+              - Path=/hzh-event/** # 路径断言，判断路径是否是以/user开头，如果是则符合
+
+        - id: team-service # 路由标示，必须唯一
+            uri: lb://teamservice # 路由的目标地址 服务名称前缀 lb:
+            predicates: # 路由断言，判断请求是否符合规则
+              - Path=/hzh-team/** # 路径断言，判断路径是否是以/user开头，如果是则符合
+             #时间断言  在2037年以后才可以访问
+             #- After=2037-01-20T17:42:47.789-07:00[America/Denver]
+        - id: order-service
+          uri: lb://orderservice
+          predicates:
+            - Path=/hzh-order/**
+            # 配置在order-service 下只对该服务生效
+            #- AddRequestHeader=Truth,hzh is freaking awesome!
+      #请求头过滤器  30多种过滤器
+      default-filters:  #过滤器Truth 是key，后面是value  配置在routes：下对全局生效
+        - AddRequestHeader=Truth,hzh is freaking awesome!
+
+
+      globalcors: # 全局的跨域处理  在gateway 下一级
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+        corsConfigurations:
+          '[/**]':   #/** 拦截一切请求，凡是进入getaway的请求都拦截
+            allowedOrigins: # 允许哪些网站的跨域请求
+              - "http://localhost:8090"
+              - "http://www.leyou.com"
+            allowedMethods: # 允许的跨域ajax的请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 这次跨域检测的有效期

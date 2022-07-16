@@ -4,15 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.itcast.demo</groupId>
-    <artifactId>cloud-demo</artifactId>
+    <groupId>com.hzh.tsfse</groupId>
+    <artifactId>hzh-tsfse-cloud</artifactId>
     <version>1.0</version>
     <modules>
-        <module>user-service</module>
-        <module>order-service</module>
-        <module>eureka-server</module>
+        <module>hzh-order</module>
+        <module>hzh-event</module>
+        <module>hzh-common</module>
+        <module>hzh-team</module>
         <module>feign-api</module>
-        <module>gateway</module>
+        <module>hzh-gateway</module>
+        <module>hzh-user</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -29,8 +31,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR10</spring-cloud.version>
-        <mysql.version>5.1.47</mysql.version>
+        <mysql.version>8.0.27</mysql.version>
         <mybatis.version>2.1.1</mybatis.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <redis.version>2.6.7</redis.version>
     </properties>
 
     <dependencyManagement>
@@ -43,6 +47,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <!--nacos的管理依赖-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
@@ -57,18 +62,68 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+
             <!--mybatis-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
             </dependency>
+            <!--mybatis-plus-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-core</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
+            </dependency>
         </dependencies>
+
+
+
     </dependencyManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
+
+
+    <build>
+    <!--    <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>-->
+        <!--实现全局扫描mapper下xml文件-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+
 </project>

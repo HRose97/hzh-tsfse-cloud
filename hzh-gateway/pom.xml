@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>feign-api</artifactId>
+    <artifactId>hzh-gateway</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -17,16 +17,15 @@
     </properties>
 
     <dependencies>
-        <!--引入openfeign 依赖-->
+        <!--nacos服务注册发现依赖-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--网关gateway依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hzh.common</groupId>
-            <artifactId>hzh-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
         <dependency>
             <groupId>com.eljavatar</groupId>
@@ -41,4 +40,13 @@
             <scope>import</scope>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
