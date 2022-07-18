@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>hzh-tsfse-cloud</artifactId>
         <groupId>com.hzh.tsfse</groupId>
         <version>1.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hzh-order</artifactId>
+    <groupId>com.hzh.team</groupId>
+    <artifactId>hzh-team</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>hzh-team</name>
+    <description>hzh-team</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.hzh.common</groupId>
-            <artifactId>hzh-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+        <!--mysql驱动-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -30,68 +34,55 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
-        <!--mybatis-plus-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.1</version>
-        </dependency>
         <!--引入feign-api-->
         <dependency>
             <groupId>com.hzh.tsfse</groupId>
             <artifactId>feign-api</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.1</version>
+        </dependency>
         <!--eureka客户端依赖-->
         <!--<dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>-->
-        <!-- nacos客户端依赖包 -->
+        <!-- nacos客户端依赖包 服务发现 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-        <!--feign客户端依赖-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <!--引入HttpClient依赖-->
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-httpclient</artifactId>
-        </dependency>
-        <!--引入feign的统一api-->
-        <dependency>
-            <groupId>cn.itcast.demo</groupId>
-            <artifactId>feign-api</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--nacos的配置管理依赖 配置依赖-->
+<!--        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.hzh.common</groupId>
+            <artifactId>hzh-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
-        <!-- 引用类型赋值: JDK没有自动导入 @Resource 相关使用的包,使用maven 解决如下问题 -->
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
         </dependency>
-
-        <!--mq 生产者依赖-->
         <dependency>
-            <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-spring-boot-starter</artifactId>
-            <version>2.2.2</version>
+            <groupId>com.hzh.tsfse</groupId>
+            <artifactId>feign-api</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>com.eljavatar</groupId>
             <artifactId>SwingUtils</artifactId>
@@ -107,7 +98,6 @@
     </dependencies>
 
     <build>
-        <finalName>app</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

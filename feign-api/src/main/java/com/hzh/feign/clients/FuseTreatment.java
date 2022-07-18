@@ -25,7 +25,10 @@ public class FuseTreatment implements EventClient,UserClient,OrderClient,TeamCli
         return ResultVO.status(ResultEnum.SERVER_FEING_EVENTCLIENT);
     }
 
-
+    @Override
+    public ResultVO chinaCityCRUD(Map map) {
+        return null;
+    }
 
 
 }

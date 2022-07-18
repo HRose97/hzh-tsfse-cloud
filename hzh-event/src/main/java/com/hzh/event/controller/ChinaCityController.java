@@ -34,7 +34,7 @@ public class ChinaCityController {
 
 
     @PostMapping("/chinacity/crud")
-    public ResultVO EventInfoCURD(@RequestBody HashMap map) {
+    public ResultVO chinaCityCRUD(@RequestBody HashMap map) {
 
         HashMap<Object, Object> result = new HashMap<>();
 

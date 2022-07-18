@@ -61,3 +61,9 @@ feign:
     config:
       default:
         loggerLevel: HEADERS
+#mq配置
+rocketmq:
+  name-server: 192.168.65.131:9876
+  consumer:
+    group: hzh-tsfse-demo2
+

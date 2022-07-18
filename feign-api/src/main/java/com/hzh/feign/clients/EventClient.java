@@ -18,4 +18,9 @@ public interface EventClient {
     @RequestMapping(value = "/hzh-event/event/eventInfo/crud",method = RequestMethod.POST)
     public ResultVO findById(@RequestBody Map map);
 
+
+    @RequestMapping(value = "/hzh-event/common/chinacity/crud",method = RequestMethod.POST)
+    public ResultVO chinaCityCRUD(@RequestBody Map map);
+
+
 }
