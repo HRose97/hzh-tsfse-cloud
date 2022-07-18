@@ -1,7 +1,12 @@
 server:
-  port: 9001
+  port: 7001
   servlet:
-    context-path: /hzh-order
+    context-path: /hzh-event
+
+logging:
+  file:
+    name: ${user.home}/logs/event/hzh-event.log
+    max-size: 100MB
 
 spring:
   datasource:
@@ -9,7 +14,7 @@ spring:
     username: root
     password: 5q6W7e8R
   application:
-    name: orderService
+    name: eventService
   cloud:
     nacos:
       server-addr: 192.168.65.131:8848    # nacos服务地址
@@ -17,10 +22,9 @@ spring:
         namespace: 14be9d75-e2d3-4d73-9db1-65ef410240b4 # dev环境
         ephemeral: false # 是否是临时实例
 
-#redis配置
   redis:
     # redis数据库索引(默认为0)，我们使用索引为3的数据库，避免和其他数据库冲突
-    #database: 0
+    database: 0
     # redis服务器地址（默认为loaclhost）
     host: 192.168.65.131
     # redis端口（默认为6379）
@@ -44,11 +48,12 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:com/hzh/common/mapper/xml/*.xml
+
 
 #是否激活 swagger true or false
 swagger:
   enable: true
-
 
 
 #对feign的优化 一个是 引入httpclient 开启连接池  另一个是日志开启级别
@@ -57,10 +62,13 @@ feign:
     enabled: true # 开启feign对HttpClient的支持
     max-connections: 200 # 最大连接数
     max-connections-per-route: 50 # 单个路径的最大连接数
-
+  client:
+    config:
+      default:
+        loggerLevel: HEADERS
 #mq配置
 rocketmq:
-  name-server: 192.168.65.131
-  producer:
+  name-server: 192.168.65.131:9876
+  consumer:
     group: hzh-tsfse-demo2
 

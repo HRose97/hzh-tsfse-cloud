@@ -29,7 +29,7 @@ public class OrderApplication {
         //producerService.sentMsg();
 
         //同步消息
-        producerService.sendSyncMessage();
+        //producerService.sendSyncMessage();
 
         //发送异步消息
         //producerService.sendAsynMessage();

@@ -98,6 +98,7 @@
     </dependencies>
 
     <build>
+        <finalName>hzhTeam.jar</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

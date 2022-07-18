@@ -68,7 +68,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>app</finalName>
+        <finalName>hzhUser.jar</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

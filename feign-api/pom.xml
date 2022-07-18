@@ -41,4 +41,8 @@
             <scope>import</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>feignApi.jar</finalName>
+    </build>
 </project>
