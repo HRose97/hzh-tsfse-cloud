@@ -29,14 +29,14 @@ public class ProducerService {
     //发送简单消息
     public void sentMsg(){
         for (int i=0; i < 10; i++){
-            rocketMQTemplate.convertAndSend("hzh-demo1","简单消息  Hello rocketmq!"+i);
+            rocketMQTemplate.convertAndSend("hzh-tsfse-demo1","简单消息  Hello rocketmq!"+i);
         }
     }
 
     //发送同步消息
     public void sendSyncMessage(){
         for (int i=0; i < 10; i++) {
-            SendResult sendResult = rocketMQTemplate.syncSend("hzh-sftse-demo1", "同步消息！" + i);
+            SendResult sendResult = rocketMQTemplate.syncSend("hzh-tsfse-demo1", "同步消息！" + i);
             System.out.println(sendResult);
         }
     }

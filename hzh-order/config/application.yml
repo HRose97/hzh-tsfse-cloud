@@ -65,7 +65,16 @@ feign:
 
 #mq配置
 rocketmq:
-  name-server: 192.168.65.131
+  name-server: 192.168.65.131:9876
   producer:
-    group: hzh-tsfse-demo2
+    group: producer-hzh-tsfse-demo1
+    #消息最大长度 默认 1024 * 4 (4M)
+    #max-message-size: 4096
+    #发送消息超时时间，默认 3000  3s
+    #send-message-timeout: 30000
+    # 发送消息失败重试次数，默认2次
+    #retryTimesWhenSendFailed: 2
+
+
+
 

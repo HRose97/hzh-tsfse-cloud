@@ -27,8 +27,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 //多线程
-//@RocketMQMessageListener(topic = "hzh-demo1", consumerGroup = "${rocketmq.consumer.group}", messageModel = MessageModel.BROADCASTING)
-@RocketMQMessageListener(topic = "hzh-sftse-demo1", consumerGroup = "${rocketmq.consumer.group}", messageModel = MessageModel.BROADCASTING)
+@RocketMQMessageListener(topic = "hzh-tsfse-demo1", consumerGroup = "${rocketmq.consumer.group}", messageModel = MessageModel.BROADCASTING)
 //单线程
 //@RocketMQMessageListener(topic = "hzh-demo2-syncSeq", consumerGroup = "${rocketmq.consumer.group}",consumeMode = ConsumeMode.ORDERLY)
 //事务消息
@@ -41,6 +40,6 @@ public class ConsumerService implements RocketMQListener<String> {
 
     @Override
     public void onMessage(String s) {
-        System.out.println("消费者1  8083   收到消息内容："+ s );
+        System.out.println("消费者   收到消息内容："+ s );
     }
 }

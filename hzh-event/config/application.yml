@@ -70,5 +70,10 @@ feign:
 rocketmq:
   name-server: 192.168.65.131:9876
   consumer:
-    group: hzh-tsfse-demo2
+    group: consumer-hzh-tsfse-demo1
+    #消费者订阅的主题
+    #topic: order-test;order-demo;TestTopic;TestTag
+
+
+
 

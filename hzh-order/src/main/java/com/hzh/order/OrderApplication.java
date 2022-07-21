@@ -3,13 +3,10 @@ package com.hzh.order;
 import com.hzh.feign.clients.UserClient;
 import com.hzh.feign.config.DefaultFeignConfiguration;
 import com.hzh.order.mq.ProducerService;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 
 //@MapperScan("com.hzh.common.mapper")
 @SpringBootApplication(scanBasePackages ={"com.hzh.**"})
@@ -19,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class OrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class, args);
+        //SpringApplication.run(OrderApplication.class, args);
 
 
         ConfigurableApplicationContext run = SpringApplication.run(OrderApplication.class, args);
@@ -29,7 +26,7 @@ public class OrderApplication {
         //producerService.sentMsg();
 
         //同步消息
-        //producerService.sendSyncMessage();
+        producerService.sendSyncMessage();
 
         //发送异步消息
         //producerService.sendAsynMessage();

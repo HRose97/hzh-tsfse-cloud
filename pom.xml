@@ -35,6 +35,10 @@
         <mybatis.version>2.1.1</mybatis.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <redis.version>2.6.7</redis.version>
+        <rocketmq-client.version>4.9.2</rocketmq-client.version>
+        <lombok.version>1.18.22</lombok.version>
+        <rocketmq-spring-boot-starter.version>2.2.2</rocketmq-spring-boot-starter.version>
+        <spring-cloud-alibaba-dependencies.version>2.2.5.RELEASE</spring-cloud-alibaba-dependencies.version>
     </properties>
 
     <dependencyManagement>
@@ -52,7 +56,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.5.RELEASE</version>
+                <version>${spring-cloud-alibaba-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -87,21 +91,21 @@
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-spring-boot-starter</artifactId>
-                <version>2.2.2</version>
+                <version>${rocketmq-spring-boot-starter.version}</version>
             </dependency>
 
             <!--lombok-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
+                <version>${lombok.version}</version>
             </dependency>
 
             <!--引入rocketmq客户端依赖-->
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-client</artifactId>
-                <version>4.8.0</version>
+                <version>${rocketmq-client.version}</version>
             </dependency>
 
             <dependency>
@@ -135,7 +139,12 @@
         <!--实现全局扫描mapper下xml文件-->
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <!--实现全局扫描yml文件-->
+                <directory>config</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                </includes>
+                <filtering>false</filtering>
             </resource>
             <resource>
                 <directory>src/main/java</directory>
