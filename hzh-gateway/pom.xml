@@ -27,18 +27,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.eljavatar</groupId>
-            <artifactId>SwingUtils</artifactId>
-            <version>1.3.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.crygier</groupId>
-            <artifactId>SpringUtils</artifactId>
-            <version>1.0.1</version>
-            <scope>import</scope>
-        </dependency>
+
     </dependencies>
     <build>
         <finalName>hzhGateway.jar</finalName>

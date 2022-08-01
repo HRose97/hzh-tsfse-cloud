@@ -23,4 +23,8 @@ public interface EventClient {
     public ResultVO chinaCityCRUD(@RequestBody Map map);
 
 
+    @RequestMapping(value = "/hzh-event/common/globalLocation/crud",method = RequestMethod.POST)
+    public ResultVO globalLocationCURD(@RequestBody Map map);
+
+
 }

@@ -9,9 +9,9 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 public class PaymentInfo {
 
-  private long id;
+  private Long id;
   private String orderSn;
-  private long orderId;
+  private Long orderId;
   private String alipayTradeNo;
   private double totalAmount;
   private String subject;

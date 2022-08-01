@@ -9,12 +9,12 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 public class RefundOrderInfo {
 
-  private long refundId;
-  private long orderReturnId;
+  private Long refundId;
+  private Long orderReturnId;
   private double refund;
   private String refundSn;
-  private long refundStatus;
-  private long refundChannel;
+  private Long refundStatus;
+  private Long refundChannel;
   private String refundContent;
 
 

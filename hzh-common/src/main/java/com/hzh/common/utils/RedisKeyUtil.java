@@ -95,4 +95,51 @@ public class RedisKeyUtil {
         return stringBuffer.toString().trim();
     }
 
+
+    /**
+     * 生成用户注册ip相关键名
+     * @param
+     * @return
+     */
+    public String mkRegisterIPRedisKey(String  remoteAddr) throws Exception{
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Register")
+                .append(":")
+                .append(remoteAddr);
+        return stringBuffer.toString().trim();
+    }
+
+
+    /**
+     * 生成用户注册邮箱相关键名
+     * @param
+     * @return
+     */
+    public String mkRegisterEmailRedisKey(String  emailAddress) throws Exception{
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Register")
+                .append(":")
+                .append(emailAddress);
+        return stringBuffer.toString().trim();
+    }
+
+
+    /**
+     * 生成用户注册验证码键名
+     * @param
+     * @return
+     */
+    public String mkRegisterCodeRedisKey(String  code,String emailAddress) throws Exception{
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Register")
+                .append(":")
+                .append(emailAddress)
+                .append(":")
+                .append(code);
+        return stringBuffer.toString().trim();
+    }
+
 }

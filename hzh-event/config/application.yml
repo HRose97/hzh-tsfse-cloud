@@ -1,5 +1,5 @@
 server:
-  port: 7001
+  port: 6001
   servlet:
     context-path: /hzh-event
 

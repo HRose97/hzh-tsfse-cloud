@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 6029
 logging:
   level:
     cn.itcast: debug
@@ -20,30 +20,29 @@ spring:
     gateway:
       routes:
         - id: user-service # 路由标示，必须唯一
-          uri: lb://userservice # 路由的目标地址 服务名称前缀 lb:
+          uri: lb://userService # 路由的目标地址 服务名称前缀 lb:
           predicates: # 路由断言，判断请求是否符合规则
             - Path=/hzh-user/** # 路径断言，判断路径是否是以/user开头，如果是则符合
-
         - id: event-service # 路由标示，必须唯一
-            uri: lb://eventservice # 路由的目标地址 服务名称前缀 lb:
-            predicates: # 路由断言，判断请求是否符合规则
-              - Path=/hzh-event/** # 路径断言，判断路径是否是以/user开头，如果是则符合
-
+          uri: lb://eventService # 路由的目标地址 服务名称前缀 lb:
+          predicates: # 路由断言，判断请求是否符合规则
+             - Path=/hzh-
+              /** # 路径断言，判断路径是否是以/user开头，如果是则符合
         - id: team-service # 路由标示，必须唯一
-            uri: lb://teamservice # 路由的目标地址 服务名称前缀 lb:
-            predicates: # 路由断言，判断请求是否符合规则
-              - Path=/hzh-team/** # 路径断言，判断路径是否是以/user开头，如果是则符合
+          uri: lb://teamService # 路由的目标地址 服务名称前缀 lb:
+          predicates: # 路由断言，判断请求是否符合规则
+             - Path=/hzh-team/** # 路径断言，判断路径是否是以/user开头，如果是则符合
              #时间断言  在2037年以后才可以访问
              #- After=2037-01-20T17:42:47.789-07:00[America/Denver]
         - id: order-service
-          uri: lb://orderservice
+          uri: lb://orderService
           predicates:
             - Path=/hzh-order/**
             # 配置在order-service 下只对该服务生效
             #- AddRequestHeader=Truth,hzh is freaking awesome!
       #请求头过滤器  30多种过滤器
-      default-filters:  #过滤器Truth 是key，后面是value  配置在routes：下对全局生效
-        - AddRequestHeader=Truth,hzh is freaking awesome!
+      #default-filters:  #过滤器Truth 是key，后面是value  配置在routes：下对全局生效
+      #  - AddRequestHeader=Truth,hzh is freaking awesome!
 
 
       globalcors: # 全局的跨域处理  在gateway 下一级
@@ -52,7 +51,7 @@ spring:
           '[/**]':   #/** 拦截一切请求，凡是进入getaway的请求都拦截
             allowedOrigins: # 允许哪些网站的跨域请求
               - "http://localhost:8090"
-              - "http://www.leyou.com"
+              - "http://www.baidu.com"
             allowedMethods: # 允许的跨域ajax的请求方式
               - "GET"
               - "POST"

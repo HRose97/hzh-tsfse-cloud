@@ -16,8 +16,8 @@ public class HzhOrder implements Serializable {
   public static final long serialVersionUID=1L;
 
   private String orderId;
-  private long userId;
-  private long couponId;
+  private Long userId;
+  private Long couponId;
   private String createTime;
   private String memberUsername;
   private double totalAmount;
@@ -28,14 +28,14 @@ public class HzhOrder implements Serializable {
   private double discountAmount;
   private String payType;
   private String status;
-  private long integration;
+  private Long integration;
   private String billType;
   private String billHeader;
   private String billContent;
   private String billReceiverPhone;
   private String billReceiverEmail;
   private String note;
-  private long useIntegration;
+  private Long useIntegration;
   private String paymentTime;
   private String orderType;
   private String orderState;

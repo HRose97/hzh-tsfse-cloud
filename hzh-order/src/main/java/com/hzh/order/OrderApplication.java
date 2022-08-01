@@ -20,13 +20,13 @@ public class OrderApplication {
 
 
         ConfigurableApplicationContext run = SpringApplication.run(OrderApplication.class, args);
-        ProducerService producerService = (ProducerService)run.getBean("ProducerService");
+        //ProducerService producerService = (ProducerService)run.getBean("ProducerService");
         //方法在ProducerSerice中
         //简单消息
         //producerService.sentMsg();
 
         //同步消息
-        producerService.sendSyncMessage();
+        //producerService.sendSyncMessage();
 
         //发送异步消息
         //producerService.sendAsynMessage();

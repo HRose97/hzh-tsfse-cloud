@@ -19,6 +19,10 @@ public class HzhUserControllrt {
     private HzhUserService hzhUserService;
 
 
+    @GetMapping("/test")
+    public String test(){
+        return "测试";
+    }
 
 
 }

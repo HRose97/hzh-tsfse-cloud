@@ -81,7 +81,7 @@ public class FeignControllrt {
 
 
     //远程调用   获取球队中心查看信息
-    @PostMapping("/order/getTeamAll")
+    @PostMapping("/team/getTeamAll")
     public ResultVO getTeamAll(@RequestBody Map map){
         int userId = null ==  map.get("userId") ? 0 : Integer.parseInt(map.get("userId").toString());
         if ("0".equals(userId)){

@@ -29,6 +29,15 @@ public class RedisUtils {
 
     private final StringRedisTemplate redisTemplate;
 
+     public static final int ONESECOND  = 1;                    //1s
+     public static final int ONEMINUTE  = 1 * ONESECOND;        //1min
+     public static final int ONEHOUR = 1 * ONEMINUTE;           //1h
+     public static final int ONEDAY = 24 * ONEHOUR;             //1d
+     public static final int ONEWEEK = 7 * ONEDAY;              //1周
+
+
+
+
 
     @Autowired
     public RedisUtils(StringRedisTemplate redisTemplate) {
@@ -156,6 +165,32 @@ public class RedisUtils {
             return false;
         }
     }
+
+     /**
+      * 设置指定 key 的值 以及过期时间
+      * timeout  过期时间
+      * unit  过期时间单位
+      *
+      * DAYS：天时间单元代表24小时
+      * HOURS：小时时间单元代表60分钟
+      * MICROSECONDS：微秒时间单元代表千分之一毫秒
+      * MILLISECONDS：毫秒时间单元代表千分之一秒
+      * MINUTES：分钟时间单元代表60秒
+      * NANOSECONDS：纳秒时间单元代表千分之一微秒
+      * SECONDS：时间单元代表1秒
+      *
+      * 使用方法为：  过期时间2h
+      *   redisUtils.set(registerRedisKey,String.valueOf(i), 2, TimeUnit.HOURS);
+      */
+     public Boolean set(String key, String value,long timeout, TimeUnit unit) {
+         try {
+             redisTemplate.opsForValue().set(key, value, timeout,unit);
+             return true;
+         }catch (Exception e){
+             log.error(REDIS_ERROR,e);
+             return false;
+         }
+     }
 
     /**
      * 获取指定 key 的值
