@@ -121,7 +121,9 @@ public class RedisKeyUtil {
         stringBuffer.append(":")
                 .append("Register")
                 .append(":")
-                .append(emailAddress);
+                .append(emailAddress)
+                .append(":")
+                .append("H");
         return stringBuffer.toString().trim();
     }
 
@@ -131,14 +133,12 @@ public class RedisKeyUtil {
      * @param
      * @return
      */
-    public String mkRegisterCodeRedisKey(String  code,String emailAddress) throws Exception{
+    public String mkRegisterCodeRedisKey(String emailAddress) throws Exception{
         StringBuffer stringBuffer = new StringBuffer("User");
         stringBuffer.append(":")
                 .append("Register")
                 .append(":")
-                .append(emailAddress)
-                .append(":")
-                .append(code);
+                .append(emailAddress);
         return stringBuffer.toString().trim();
     }
 

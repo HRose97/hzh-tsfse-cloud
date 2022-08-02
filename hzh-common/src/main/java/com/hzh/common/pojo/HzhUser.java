@@ -29,9 +29,6 @@ public class HzhUser implements Serializable {
     //@ApiModelProperty(value = "用户名")
     private String userName;
 
-    //@ApiModelProperty(value = "昵称")
-    private String nickName;
-
     //@ApiModelProperty(value = "密码")
     private String password;
 
@@ -56,20 +53,17 @@ public class HzhUser implements Serializable {
     //@ApiModelProperty(value = "用户类型（eventman 体育类型管理用户，sportstypeman 体育类型管理用户，teamsman 球队管理用户，admin  用户管理， visitor 访客 ， member 会员）")
     private String userType;
 
-    //@ApiModelProperty(value = "创建人的用户id")
-    private Long createBy;
-
     //@ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private String createTime;
 
     //@ApiModelProperty(value = "更新人")
     private Long updateBy;
 
     //@ApiModelProperty(value = "更新时间")
-    private Date updateTime;
+    private String updateTime;
 
     //@ApiModelProperty(value = "删除标志（0代表未删除，1代表已删除）")
-    private Integer delFlag;
+    private String delFlag;
 
 
 }

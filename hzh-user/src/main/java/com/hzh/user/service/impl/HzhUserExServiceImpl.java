@@ -1,14 +1,19 @@
 package com.hzh.user.service.impl;
 
+import com.anji.captcha.model.common.RepCodeEnum;
+import com.anji.captcha.model.common.ResponseModel;
+import com.anji.captcha.model.vo.CaptchaVO;
+import com.anji.captcha.service.CaptchaService;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.utils.DateUtils;
+import com.hzh.common.utils.FormatCheckUtils;
 import com.hzh.common.utils.RedisKeyUtil;
 import com.hzh.common.utils.RedisUtils;
 import com.hzh.user.service.HzhUserExService;
-import com.hzh.user.utils.EmailSender;
-import com.hzh.user.utils.FormatCheckUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.util.TextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,6 +37,9 @@ public class HzhUserExServiceImpl implements HzhUserExService {
     @Resource
     private RedisKeyUtil redisKeyUtil;
 
+    @Resource
+    private CaptchaService captchaService;
+
      /**
       * @Author Hou zhonghu
       * @Description  发送邮箱验证码
@@ -41,7 +49,33 @@ public class HzhUserExServiceImpl implements HzhUserExService {
       * @return 
       **/
     @Override
-    public ResultVO sendEmailCode(String emailAddress,boolean mustRegister) throws Exception {
+    public ResultVO sendEmailCode(String verfication,String emailAddress,boolean mustRegister) throws Exception {
+        String date = DateUtils.getCurrent(DateUtils.ticketPattern);
+        log.info("String verfication ===> " +  verfication);
+
+        CaptchaVO captchaVO = new CaptchaVO();
+        captchaVO.setCaptchaVerification(verfication);
+        //这种验证方式是会删除只能验证一次
+        ResponseModel response = captchaService.verification(captchaVO);
+        String repCode = response.getRepCode();
+        System.out.println("repCode ===> "+repCode);
+        if(response.isSuccess() == false){
+            //验证码校验失败，返回信息告诉前端
+            //repCode  0000  无异常，代表成功
+            //repCode  9999  服务器内部异常
+            //repCode  0011  参数不能为空
+            //repCode  6110  验证码已失效，请重新获取
+            //repCode  6111  验证失败
+            //repCode  6112  获取验证码失败,请联系管理员
+            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
+                return ResultVO.ok(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+            }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
+                return ResultVO.ok("图灵码验证失败");
+            }
+        }
+
+
+
         log.info("email address {} must register {},",emailAddress,mustRegister);
         //检查数据是否正确
         if (TextUtils.isEmpty(emailAddress)) {
@@ -66,7 +100,7 @@ public class HzhUserExServiceImpl implements HzhUserExService {
         //ip地址
         String remoteAddr = request.getRemoteAddr();
         remoteAddr = remoteAddr.replaceAll(":", "-");
-        log.info("remote address ...{}",remoteAddr);
+        log.info("客户端Ip地址为 ...{}",remoteAddr);
 
         //通过ip地址判断是否频繁发送
         String registerIpRedisKey = redisKeyUtil.mkRegisterIPRedisKey(remoteAddr);
@@ -74,7 +108,7 @@ public class HzhUserExServiceImpl implements HzhUserExService {
         if (!StringUtils.isEmpty(ipKeyTimes)){
             int i = Integer.parseInt(ipKeyTimes);
             log.info("当前ip{}调用了{}次",remoteAddr,i);
-            if (i > 10){
+            if (i > 100){
                 return ResultVO.ok("请不要通过此ip"+remoteAddr+"频繁发送");
             }else {
                 i++;
@@ -93,7 +127,7 @@ public class HzhUserExServiceImpl implements HzhUserExService {
             int i = Integer.parseInt(emailKeyTimes);
             log.info("当前邮箱{}已经调用了{}次",emailAddress,i);
             //TODO 次数是属于配置项 一般都不是写死得 需要抽取出来到可配置得地方
-            if (i > 10){
+            if (i > 100){
                 return ResultVO.ok("请不要通过此邮箱账号"+emailAddress+"频繁发送");
             }else {
                 i++;
@@ -113,8 +147,8 @@ public class HzhUserExServiceImpl implements HzhUserExService {
         }
         log.info("六位数的验证码为：{}",mailCode);
         //保存到redis中  验证码5min有效
-        String codeRedisKey = redisKeyUtil.mkRegisterCodeRedisKey(String.valueOf(mailCode), emailAddress);
-        redisUtils.set(codeRedisKey, String.valueOf(mailCode),5,TimeUnit.MINUTES);
+        String codeRedisKey = redisKeyUtil.mkRegisterCodeRedisKey(emailAddress);
+        redisUtils.set(codeRedisKey, date +"的注册验证码："+mailCode,5,TimeUnit.MINUTES);
         //发送验证码
         //EmailSender.sendEmailSendCode(emailAddress, "注册验证码："+ mailCode +",5分钟内有效！");
 
