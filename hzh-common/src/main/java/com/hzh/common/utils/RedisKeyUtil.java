@@ -4,6 +4,7 @@ import com.hzh.common.pojo.CoachInfo;
 import com.hzh.common.pojo.EventInfo;
 import com.hzh.common.pojo.HzhOrder;
 import com.hzh.common.pojo.HzhUser;
+import com.hzh.common.pojo.vo.LoginUserVo;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -142,4 +143,31 @@ public class RedisKeyUtil {
         return stringBuffer.toString().trim();
     }
 
+
+    /**
+     * 生成用户登录token键名
+     * @param
+     * @return
+     */
+    public String mkLoginTokenKey(LoginUserVo loginUserVo) throws Exception{
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Login")
+                .append(":")
+                .append(loginUserVo.getId())
+                .append(":")
+                .append(loginUserVo.getUserName());
+        return stringBuffer.toString().trim();
+    }
+
+    public String mkCookieKey(LoginUserVo hasUserByUserName) {
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Cookie")
+                .append(":")
+                .append(hasUserByUserName.getId())
+                .append(":")
+                .append(hasUserByUserName.getUserName());
+        return stringBuffer.toString().trim();
+    }
 }

@@ -9,6 +9,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,10 +17,13 @@ import java.util.UUID;
  */
 public class JwtUtil {
 
-    //有效期为
-    public static final Long JWT_TTL = 60 * 60 *1000L;// 60 * 60 *1000  一个小时
+    //有效期为1H
+    public static Long jwtTtl = 60 * 60 *1000L;// 60 * 60 *1000  1个小时
+    public static Long jwtTtlOneDay = jwtTtl * 24;// 60 * 60 *1000  1天
+    public static Long jwtTtlOneWeek = jwtTtlOneDay * 7;// 60 * 60 *1000  1周
+    public static Long jwtTtlOneMonth = jwtTtlOneDay * 30;// 60 * 60 *1000  1月
     //设置秘钥明文
-    public static final String JWT_KEY = "sangeng";
+    public static String jwtKey = "hzh-TSFSE";
 
     public static String getUUID(){
         String token = UUID.randomUUID().toString().replaceAll("-", "");
@@ -53,14 +57,14 @@ public class JwtUtil {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         if(ttlMillis==null){
-            ttlMillis=JwtUtil.JWT_TTL;
+            ttlMillis=JwtUtil.jwtTtl;
         }
         long expMillis = nowMillis + ttlMillis;
         Date expDate = new Date(expMillis);
         return Jwts.builder()
                 .setId(uuid)              //唯一的ID
                 .setSubject(subject)   // 主题  可以是JSON数据
-                .setIssuer("sg")     // 签发者
+                .setIssuer("hzh")     // 签发者
                 .setIssuedAt(now)      // 签发时间
                 .signWith(signatureAlgorithm, secretKey) //使用HS256对称加密算法签名, 第二个参数为秘钥
                 .setExpiration(expDate);
@@ -94,7 +98,7 @@ public class JwtUtil {
      * @return
      */
     public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.JWT_KEY);
+        byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.jwtKey);
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }
@@ -114,5 +118,66 @@ public class JwtUtil {
                 .getBody();
     }
 
+    //===================================
+    public long getTtl(){
+        return jwtTtl;
+    }
+
+    public void setJwtTtl(long jwtTtl){
+        this.jwtTtl= jwtTtl;
+    }
+
+     /**
+      * @Author Hou zhonghu
+      * @Description  claims 载荷内容
+      * @Date 2022/8/3 19:54
+      * @Param JWT_TTL  有效时长
+      * @return
+      **/
+     public static  String createToken(Map<String,Object> claims,long ttl,String salt){
+         JwtUtil.jwtTtl = ttl;
+         return createToken(claims,salt);
+     }
+
+     public static  String createRefreshToken(String userId,long ttl,String salt){
+         long nowMills = System.currentTimeMillis();
+         Date now = new Date(nowMills);
+         JwtBuilder builder = Jwts.builder().setId(userId)
+                 .setIssuedAt(now)
+                 .signWith(SignatureAlgorithm.HS256,salt);
+         if (ttl > 0){
+             builder.setExpiration(new Date(nowMills + ttl));
+         }
+         return builder.compact();
+     }
+
+    /**
+     * @Author Hou zhonghu
+     * @Description  claims 载荷内容
+     * @Date 2022/8/3 19:54
+     * @Param JWT_TTL  有效时长
+     * @return
+     **/
+    public static  String createToken(Map<String,Object> claims,String salt){
+        long nowMills = System.currentTimeMillis();
+        Date now = new Date(nowMills);
+        JwtBuilder builder = Jwts.builder()
+                .setIssuedAt(now)
+                .signWith(SignatureAlgorithm.HS256,salt);
+        if (claims != null){
+            builder.setClaims(claims);
+        }
+        if (jwtTtl > 0){
+            builder.setExpiration(new Date(nowMills + jwtTtl));
+        }
+        return builder.compact();
+    }
+
+    public static Claims parseJWT(String jwtStr,String salt){
+        return Jwts.parser()
+                .setSigningKey(salt)
+                .parseClaimsJws(jwtStr)
+                .getBody();
+    }
 
 }

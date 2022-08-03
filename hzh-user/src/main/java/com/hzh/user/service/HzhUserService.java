@@ -1,6 +1,7 @@
 package com.hzh.user.service;
 
 import com.hzh.common.pojo.HzhUser;
+import com.hzh.common.pojo.vo.ResultVO;
 
 /**
  * @author Hou Zhonghu
@@ -14,4 +15,8 @@ public interface HzhUserService {
     HzhUser findByUserName(String userName);
 
     HzhUser findByEmail(String email);
+
+    ResultVO login(HzhUser loginUser, String verification) throws Exception;
+
+    HzhUser findByPhoneNum(String phonenumber);
 }

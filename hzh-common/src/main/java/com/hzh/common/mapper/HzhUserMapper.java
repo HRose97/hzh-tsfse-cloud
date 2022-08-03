@@ -2,7 +2,9 @@ package com.hzh.common.mapper;
 
 import com.hzh.common.pojo.HzhUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hzh.common.pojo.vo.LoginUserVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,5 +16,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface HzhUserMapper extends BaseMapper<HzhUser> {
+
+    LoginUserVo selectOneByFilter(@Param("userName") String userName);
+
+    HzhUser selectByFilter();
+
 
 }

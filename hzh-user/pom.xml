@@ -118,7 +118,6 @@
                     <classpathScope>test</classpathScope>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

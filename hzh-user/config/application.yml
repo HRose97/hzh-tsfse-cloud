@@ -47,10 +47,15 @@ spring:
       # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
       max-wait: -1
 
-mybatis:
+mybatis-plus:
   type-aliases-package: com.hzh.common.pojo
   configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+  mapper-locations: classpath*:com/hzh/common/mapper/xml/*.xml
+  #不管用
+  #mapper-locations:
+  #  - classpath*:**/mapper/xml/*.xml
 
 #  微服务A 调用 B， 即：A是客户端，B是服务端。 这个是客户端配置，因此要配在A里面。
 #  其中“default” 是全局配置，对所有的 @FeignClient 生效，

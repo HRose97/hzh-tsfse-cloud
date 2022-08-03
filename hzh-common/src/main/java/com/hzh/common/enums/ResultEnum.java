@@ -15,6 +15,14 @@ public enum ResultEnum {
     SUCCESS("AAAAAA", "操作成功"),
     INNER_EXCEPTION("EI0000", "系统内部异常！"),
     VALIDATE_ERROR("EV0001", "参数校验出错！"),
+
+    CODE_ERROR("EV0002", "验证码校验出错！"),
+    LOGIN_ERROR("LE0001","用户名或密码错误"),
+    LOGIN_ACCOUNT_ERROR("LE0002","账号不存在"),
+
+    LOGIN_DISABLED_USER("LE0002","登录用户已被禁用"),
+
+
     SYSTEM_ERROR_NULL_HOST("ES0004","当前系统下没有主机"),
 
     SERVER_FEIGN_FUSING("SFF000", "服务调用发生熔断！"),
@@ -40,8 +48,24 @@ public enum ResultEnum {
     EXECUTOR_THREAD_POOL_REJECTED("ETPR00","执行器线程池拒绝线程入池！"),
     UPDATE_STATE_ERROR("EU0001","启用/停用更新失败！"),
 
+    //验证码相关
+    //repCode  0000  无异常，代表成功
+    //repCode  9999  服务器内部异常
+    //repCode  0011  参数不能为空
+    //repCode  6110  验证码已失效，请重新获取
+    //repCode  6111  验证失败
+    //repCode  6112  获取验证码失败,请联系管理员
+
+    VERIFICATION_CODE_ERROR1("VC9999","服务器内部异常"),
+    VERIFICATION_CODE_ERROR2("VC0011","参数不能为空"),
+    VERIFICATION_CODE_ERROR3("VC6110","验证码已失效,请重新获取"),
+    VERIFICATION_CODE_ERROR4("VC6111","验证失败"),
+    VERIFICATION_CODE_ERROR5("VC6112","获取验证码失败,请联系管理员"),
+
+
     //参数为空
     PARAMETER_EMPTY("EP0001","参数为空");
+
 
 
     private String code;

@@ -47,8 +47,11 @@ spring:
 
 
 mybatis-plus:
+  type-aliases-package: com.hzh.common.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:com/hzh/common/mapper/xml/*.xml
 
 #是否激活 swagger true or false
 swagger:

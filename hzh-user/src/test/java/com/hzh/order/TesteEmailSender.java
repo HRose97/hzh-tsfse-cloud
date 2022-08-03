@@ -1,6 +1,8 @@
 package com.hzh.order;
 
-import com.hzh.user.utils.EmailSender;
+
+
+import com.hzh.common.utils.EmailSender;
 
 import javax.mail.MessagingException;
 
@@ -19,7 +21,13 @@ public class TesteEmailSender {
                .to("1391210212@qq.com")          //收件人  可以多分
                .send();
         System.out.println("发送完成");
+        test();
 
+    }
+
+    public static void test(){
+        String  s  = "$2a$10$vxB00ExKEKw6rMtVKU/A3.mia/PRVo51/0EVNm5x9J6e821S8ml1W";
+        System.out.println(s.length());
     }
 
 

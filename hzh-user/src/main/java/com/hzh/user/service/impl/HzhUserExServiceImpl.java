@@ -5,6 +5,7 @@ import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.service.BaseService;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.common.utils.FormatCheckUtils;
 import com.hzh.common.utils.RedisKeyUtil;
@@ -13,10 +14,8 @@ import com.hzh.user.service.HzhUserExService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.util.TextUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-public class HzhUserExServiceImpl implements HzhUserExService {
+public class HzhUserExServiceImpl extends BaseService implements HzhUserExService {
 
     @Resource
     private RedisUtils redisUtils;
@@ -58,7 +57,7 @@ public class HzhUserExServiceImpl implements HzhUserExService {
         //这种验证方式是会删除只能验证一次
         ResponseModel response = captchaService.verification(captchaVO);
         String repCode = response.getRepCode();
-        System.out.println("repCode ===> "+repCode);
+        //System.out.println("repCode ===> "+repCode);
         if(response.isSuccess() == false){
             //验证码校验失败，返回信息告诉前端
             //repCode  0000  无异常，代表成功
@@ -93,12 +92,11 @@ public class HzhUserExServiceImpl implements HzhUserExService {
             //TODO
         }
         //TODO 防止恶意频繁调用  可以通过IP，通过邮箱地址
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        System.out.println("请求中截取内容："+request);
 
-        //ip地址
-        String remoteAddr = request.getRemoteAddr();
+
+
+        //ip地址  继承关系可以直接使用方法
+        String remoteAddr = getRequest().getRemoteAddr();
         remoteAddr = remoteAddr.replaceAll(":", "-");
         log.info("客户端Ip地址为 ...{}",remoteAddr);
 

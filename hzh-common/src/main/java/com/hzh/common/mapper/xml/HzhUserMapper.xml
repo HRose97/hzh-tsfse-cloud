@@ -2,4 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzh.common.mapper.HzhUserMapper">
 
+
+    <select id="selectByFilter" resultType="com.hzh.common.pojo.HzhUser">
+        SELECT
+        *
+        FROM
+        hzh_user
+        <where>
+            1 = 1
+            <if test="id != null  and id != '' ">
+                AND id = #{id}
+            </if>
+            <if test="userName !=null  and userName != '' ">
+                AND user_name = #{userName}
+            </if>
+            <if test="password !=null  and password != '' ">
+                AND password = #{password}
+            </if>
+            <if test="userDescription !=null  and userDescription != '' ">
+                AND user_description = #{userDescription}
+            </if>
+            <if test="status !=null  and status != '' ">
+                AND status = #{status}
+            </if>
+            <if test="email !=null  and email != '' ">
+                AND email = #{email}
+            </if>
+            <if test="phonenumber !=null  and phonenumber != '' ">
+                AND phonenumber = #{phonenumber}
+            </if>
+            <if test="sex !=null  and sex != '' ">
+                AND sex = #{sex}
+            </if>
+            <if test="avatar !=null  and avatar != '' ">
+                AND avatar = #{avatar}
+            </if>
+            <if test="userType !=null  and userType != '' ">
+                AND user_type = #{userType}
+            </if>
+            <if test="createTime !=null  and createTime != '' ">
+                AND create_Time = #{createTime}
+            </if>
+            <if test="updateBy !=null  and updateBy != '' ">
+                AND update_by = #{updateBy}
+            </if>
+            <if test="updateTime !=null  and updateTime != '' ">
+                AND update_time = #{updateTime}
+            </if>
+            <if test="delFlag !=null  and delFlag != '' ">
+                AND del_flag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectOneByFilter" resultType="com.hzh.common.pojo.vo.LoginUserVo">
+        SELECT
+        *
+        FROM
+        hzh_user
+        <where>
+            1 = 1
+            <if test="userName !=null  and userName != '' ">
+                AND user_name = #{userName}
+            </if>
+            <if test="email !=null  and email != '' ">
+                AND email = #{userName}
+            </if>
+            <if test="phonenumber !=null  and phonenumber != '' ">
+                AND phonenumber = #{userName}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

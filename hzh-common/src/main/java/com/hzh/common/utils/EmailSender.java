@@ -1,8 +1,6 @@
-/*
-package com.hzh.user.utils;
+package com.hzh.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -12,14 +10,12 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
-*/
 /**
  * 邮件工具类
  *
  * @author Hou Zhonghu
  * @since 2022/7/28 23:06
- *//*
-
+ */
 
 @Slf4j
 public class EmailSender {
@@ -53,57 +49,49 @@ public class EmailSender {
         return props;
     }
 
-    */
-/**
+    /**
      * smtp entnterprise qq
      *
      * @param debug
      * @return
-     *//*
-
+     */
     public static Properties SMTP_ENT_QQ(boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.exmail.qq.com");
         return props;
     }
 
-    */
-/**
+    /**
      * smtp qq
      *
      * @param debug enable debug
      * @return
-     *//*
-
+     */
     public static Properties SMTP_QQ(boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.qq.com");
         return props;
     }
 
-    */
-/**
+    /**
      * smtp 163
      *
      * @param debug enable debug
      * @return
-     *//*
-
+     */
     public static Properties SMTP_163(Boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.163.com");
         return props;
     }
 
-    */
-/**
+    /**
      * config username and password
      *
      * @param props    email property config
      * @param username email auth username
      * @param password email auth password
-     *//*
-
+     */
     public static void config(Properties props, final String username, final String password) {
         props.setProperty("username", username);
         props.setProperty("password", password);
@@ -121,13 +109,11 @@ public class EmailSender {
         });
     }
 
-    */
-/**
+    /**
      * set email subject
      *
      * @param subject subject title
-     *//*
-
+     */
     public static EmailSender subject(String subject) {
         EmailSender EmailSender = new EmailSender();
         EmailSender.msg = new MimeMessage(session);
@@ -139,25 +125,21 @@ public class EmailSender {
         return EmailSender;
     }
 
-    */
-/**
+    /**
      * set email from
      *
      * @param nickName from nickname
-     *//*
-
+     */
     public EmailSender from(String nickName) {
         return from(nickName, user);
     }
 
-    */
-/**
+    /**
      * set email nickname and from user
      *
      * @param nickName from nickname
      * @param from     from email
-     *//*
-
+     */
     public EmailSender from(String nickName, String from) {
         try {
             String encodeNickName = MimeUtility.encodeText(nickName);
@@ -334,15 +316,13 @@ public class EmailSender {
         return bodyPart;
     }
 
-     */
-/**
+     /**
       * @Author Hou zhonghu
       * @Description  如果超时了还没收到，用户在调用发送
       * @Date 2022/7/29 13:08
       * @Param mailAddress  邮箱地址
       * @return content  内容----也就是验证码
-      **//*
-
+      **/
     public static void sendEmailSendCode(String mailAddress,String content) throws MessagingException {
         EmailSender.subject("体育赛事售票系统用户注册")
                 .from("体育赛事售票系统用户注册中心")
@@ -352,7 +332,6 @@ public class EmailSender {
     }
 
     //测试邮件发送  测试类中有
-*/
 /*    public static void main(String[] args) throws MessagingException {
         EmailSender.subject("体育赛事售票系统用户注册")
                 .from("体育赛事售票系统用户注册中心")
@@ -360,10 +339,8 @@ public class EmailSender {
                 .to("xxx@qq.com")
                 .send();
 
-    }*//*
-
+    }*/
 
 
 }
 
-*/

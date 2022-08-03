@@ -11,7 +11,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @EnableFeignClients(clients = {OrderClient.class,EventClient.class, TeamClinet.class}, defaultConfiguration = DefaultFeignConfiguration.class)
+
 @SpringBootApplication(scanBasePackages ={"com.hzh"})
+//@MapperScan("com.hzh.common.mapper") 用了这个扫描不到 RedisUtils
 public class UserApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);
