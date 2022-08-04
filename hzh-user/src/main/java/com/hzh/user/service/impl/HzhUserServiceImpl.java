@@ -100,11 +100,31 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             //repCode  6110  验证码已失效，请重新获取
             //repCode  6111  验证失败
             //repCode  6112  获取验证码失败,请联系管理员
-            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
+
+            //没有具体说明是什么异常
+            /*            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
                 return ResultVO.ok(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
             }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
                 return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR1);
+            }*/
+
+            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
+                return ResultVO.ok(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+            }else {
+                switch (repCode){
+                    case "9999":
+                        return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR1);
+                    case "0011":
+                        return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR2);
+                    case "6110":
+                        return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR3);
+                    case "6111":
+                        return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR4);
+                    case "6112":
+                        return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR5);
+                }
             }
+
         }
 
         //校验数据
@@ -118,20 +138,35 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             return ResultVO.status(ResultEnum.VALIDATE_ERROR);
         }*/
 
-        //根据用户名查询是否存在该用户  查询用户 TODO 要先去判断用户通过什么方式登录的
-        LoginUserVo hasUserByUserName = hzhUserMapper.selectOneByFilter(userName);
-        if (hasUserByUserName == null) {
+        LoginUserVo hasUserByUserName = null;
+
+        //根据用户名查询是否存在该用户  查询用户 TODO 要先去判断用户通过什么方式登录
+        //先判断是否为手机号
+        boolean mobile = FormatCheckUtils.isMobile(userName);
+        if (mobile){
+            String phoneNum = userName;
+             hasUserByUserName = hzhUserMapper.selectOneByPhone(phoneNum);
+        }
+        //在判断是否为邮箱地址
+        boolean email = FormatCheckUtils.isEmail(userName);
+        if (email){
+            String emailIsUserName = userName;
+             hasUserByUserName = hzhUserMapper.selectOneByEmail(emailIsUserName);
+        }
+        //最后都不是则通过userName
+         hasUserByUserName = hzhUserMapper.selectOneByUserName(userName);
+        if (hasUserByUserName == null ) {
             return ResultVO.status(ResultEnum.LOGIN_ACCOUNT_ERROR);
         }else if (hasUserByUserName.getStatus().equals("1")){
             return ResultVO.status(ResultEnum.LOGIN_DISABLED_USER);
         }else {
             //如果用户存在并且未被禁用
-            //对密码进行比对
+            //对密码进行比对  前端传递未加密  数据库中加密
             boolean matches = passwordEncoder.matches(hasUserByUserName.getPassword(), passwordEncoder.encode(loginUser.getPassword()));
             if (matches){
                 String token = createToken(hasUserByUserName);
-                System.out.println("token === > " + token);
-                if (token.equals("")){
+                log.info("{}此次登录的token === >" +hasUserByUserName.getId(),token);
+                if (!token.equals("")){
                     return ResultVO.ok();
                 }else {
                     return ResultVO.status(ResultEnum.INNER_EXCEPTION);
@@ -178,7 +213,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         refreshMap.put("refreshToken",refreshToken);
         refreshMap.put("tokenKey",tokenKey);
         refreshMap.put("userId", hasUserByUserName.getId());
-        redisUtils.hPutAll(refreshToken,refreshMap);
+        redisUtils.hPutAll(hasUserByUserName.getId(),refreshMap);
 
         return token;
     }

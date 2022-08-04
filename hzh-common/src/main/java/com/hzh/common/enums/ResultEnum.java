@@ -13,6 +13,8 @@ import lombok.Getter;
 public enum ResultEnum {
 
     SUCCESS("AAAAAA", "操作成功"),
+    SUCCESS_ERROR("BBBBBB","业务异常"),
+
     INNER_EXCEPTION("EI0000", "系统内部异常！"),
     VALIDATE_ERROR("EV0001", "参数校验出错！"),
 

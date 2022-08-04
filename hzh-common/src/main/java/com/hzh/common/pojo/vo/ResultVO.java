@@ -39,12 +39,18 @@ public class ResultVO<T> {
             return new ResultVO<T>(ResultEnum.SUCCESS);
         }
 
-        // 成功响应（有响应体）
+        // 成功响应（有响应体）  接口通了业务也正常
         public static <T> ResultVO<T> ok(@NonNull T data) {
             return new ResultVO<T>(ResultEnum.SUCCESS, data);
         }
 
-        // 成功响应（未查询到数据）
+        // 成功响应（有响应体）  接口通了业务异常常
+        public static <T> ResultVO<T> okAndError(@NonNull T data) {
+            return new ResultVO<T>(ResultEnum.SUCCESS_ERROR, data);
+        }
+
+
+    // 成功响应（未查询到数据）
         public static <T> ResultVO<T> okAndNull() {
             return new ResultVO<T>(ResultEnum.SUCCESS);
         }

@@ -17,9 +17,18 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface HzhUserMapper extends BaseMapper<HzhUser> {
 
-    LoginUserVo selectOneByFilter(@Param("userName") String userName);
+    LoginUserVo selectOneByFilter(@Param("userName") String userName,
+                                  @Param("email")String email,
+                                  @Param("phonenumber")String phonenumber);
 
-    HzhUser selectByFilter();
 
 
+    HzhUser selectByFilter(HzhUser hzhUser);
+
+
+    LoginUserVo selectOneByPhone( @Param("phonenumber")String phonenumber);
+
+    LoginUserVo selectOneByEmail(@Param("email")String email);
+
+    LoginUserVo selectOneByUserName(@Param("userName") String userName);
 }

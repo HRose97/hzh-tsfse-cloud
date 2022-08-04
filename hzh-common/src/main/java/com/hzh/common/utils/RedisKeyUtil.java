@@ -162,11 +162,9 @@ public class RedisKeyUtil {
 
     public String mkCookieKey(LoginUserVo hasUserByUserName) {
         StringBuffer stringBuffer = new StringBuffer("User");
-        stringBuffer.append(":")
+        stringBuffer
                 .append("Cookie")
-                .append(":")
                 .append(hasUserByUserName.getId())
-                .append(":")
                 .append(hasUserByUserName.getUserName());
         return stringBuffer.toString().trim();
     }

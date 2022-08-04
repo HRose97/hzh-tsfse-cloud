@@ -63,17 +63,35 @@
         hzh_user
         <where>
             1 = 1
-            <if test="userName !=null  and userName != '' ">
                 AND user_name = #{userName}
-            </if>
-            <if test="email !=null  and email != '' ">
-                AND email = #{userName}
-            </if>
-            <if test="phonenumber !=null  and phonenumber != '' ">
-                AND phonenumber = #{userName}
-            </if>
+                AND email = #{email}
+                AND phonenumber = #{phonenumber}
         </where>
     </select>
 
+    <select id="selectOneByPhone" resultType="com.hzh.common.pojo.vo.LoginUserVo">
+        SELECT * FROM hzh_user
+        <where>
+            1 = 1
+            AND phonenumber = #{phonenumber}
+        </where>
+    </select>
+
+    <select id="selectOneByEmail" resultType="com.hzh.common.pojo.vo.LoginUserVo">
+        SELECT * FROM hzh_user
+        <where>
+            1 = 1
+            AND email = #{email}
+        </where>
+    </select>
+
+
+    <select id="selectOneByUserName" resultType="com.hzh.common.pojo.vo.LoginUserVo">
+        SELECT * FROM hzh_user
+        <where>
+            1 = 1
+            AND user_name = #{userName}
+        </where>
+    </select>
 
 </mapper>

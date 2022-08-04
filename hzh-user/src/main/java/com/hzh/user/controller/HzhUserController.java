@@ -130,7 +130,7 @@ public class HzhUserController {
          if (loginflag.getCode().equals("AAAAAA")){
              return ResultVO.ok("登录成功");
          }else {
-             return ResultVO.status(ResultEnum.LOGIN_ERROR);
+             return ResultVO.okAndError(loginflag.getMsg());
          }
      }
 
