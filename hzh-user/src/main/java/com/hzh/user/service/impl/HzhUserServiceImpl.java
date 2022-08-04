@@ -85,7 +85,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         log.info("hzhUser ===> " + loginUser);
         log.info("verification ===> " + verification);
 
-        //校验图灵验证码
+       /* // 登录不做  校验图灵验证码
         CaptchaVO captchaVO = new CaptchaVO();
         captchaVO.setCaptchaVerification(verification);
         //这种验证方式是会删除只能验证一次
@@ -102,11 +102,11 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             //repCode  6112  获取验证码失败,请联系管理员
 
             //没有具体说明是什么异常
-            /*            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
+            *//*            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
                 return ResultVO.ok(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
             }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
                 return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR1);
-            }*/
+            }*//*
 
             if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
                 return ResultVO.ok(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
@@ -124,9 +124,8 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                         return ResultVO.status(ResultEnum.VERIFICATION_CODE_ERROR5);
                 }
             }
-
         }
-
+*/
         //校验数据
         String userName = loginUser.getUserName();
         if (StringUtils.isEmpty(userName)){
@@ -175,11 +174,6 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 return ResultVO.status(ResultEnum.LOGIN_ERROR);
             }
         }
-
-        //创建tooken
-
-
-        //返回登录结果
 
     }
 

@@ -84,11 +84,11 @@ public class HzhUserController {
         }*/
 
         //密码加密
-        String encode = bCryptPasswordEncoder.encode(hzhUser.getPassword());
+        //String encode = bCryptPasswordEncoder.encode(hzhUser.getPassword());
 
         HzhUser hzhUserInsert = new HzhUser();
         hzhUserInsert.setUserName(hzhUser.getUserName());
-        hzhUserInsert.setPassword(encode);
+        hzhUserInsert.setPassword(hzhUser.getPassword());
         hzhUserInsert.setUserDescription(Constants.UserDescription.MEMEBR_USER);
         hzhUserInsert.setStatus(Constants.User.UNFORBIDDENT_STATE);
         hzhUserInsert.setEmail(hzhUser.getEmail());
