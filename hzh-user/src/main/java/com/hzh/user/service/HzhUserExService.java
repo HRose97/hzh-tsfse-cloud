@@ -7,5 +7,5 @@ import com.hzh.common.pojo.vo.ResultVO;
  * @since 2022/7/29 10:45
  */
 public interface HzhUserExService {
-    ResultVO sendEmailCode(String verfication,String emailAddress,boolean mustRegister) throws Exception;
+    ResultVO sendEmailCode(String verfication,String emailAddress) throws Exception;
 }

@@ -22,6 +22,27 @@ public interface Constants {
     }
 
 
+    //毫秒
+    interface  Millions{
+        long SECOND = 1000;
+        long MIN = SECOND * 60;
+        long HOUR = MIN * 60;
+        long TWO_HOUR = 2 * HOUR;
+        long DAY = 24 * HOUR;
+        long MOUTH = 30 * DAY;
+    }
+
+
+    interface  TimeSecond{
+        int ONE = 1;
+        int MIN = 60 * ONE;
+        int FIVE_MIN = 5 * MIN;
+        int HOUR = 60 * MIN;
+        int TWO_HOUR = 2 * HOUR;
+        int DAY = 24 * HOUR;
+    }
+
+
     interface  UserDescription{
         String PT_USER = "平台管理员";
         String XT_USER = "系统管理员";

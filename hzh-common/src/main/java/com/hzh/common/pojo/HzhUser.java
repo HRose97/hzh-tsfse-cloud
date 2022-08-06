@@ -47,6 +47,7 @@ public class HzhUser implements Serializable {
     //@ApiModelProperty(value = "用户性别（0男，1女，2未知）")
     private String sex;
 
+    private String salt;
     //@ApiModelProperty(value = "头像")
     private String avatar;
 

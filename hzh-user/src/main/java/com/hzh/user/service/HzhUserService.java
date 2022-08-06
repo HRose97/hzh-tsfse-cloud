@@ -19,4 +19,6 @@ public interface HzhUserService {
     ResultVO login(HzhUser loginUser, String verification) throws Exception;
 
     HzhUser findByPhoneNum(String phonenumber);
+
+    ResultVO chechToken() throws Exception;
 }

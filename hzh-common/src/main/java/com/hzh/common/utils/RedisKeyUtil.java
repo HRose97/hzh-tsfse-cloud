@@ -149,14 +149,12 @@ public class RedisKeyUtil {
      * @param
      * @return
      */
-    public String mkLoginTokenKey(LoginUserVo loginUserVo) throws Exception{
+    public String mkLoginTokenKey(String tokenKey) throws Exception{
         StringBuffer stringBuffer = new StringBuffer("User");
         stringBuffer.append(":")
                 .append("Login")
                 .append(":")
-                .append(loginUserVo.getId())
-                .append(":")
-                .append(loginUserVo.getUserName());
+                .append(tokenKey);
         return stringBuffer.toString().trim();
     }
 
@@ -166,6 +164,15 @@ public class RedisKeyUtil {
                 .append("Cookie")
                 .append(hasUserByUserName.getId())
                 .append(hasUserByUserName.getUserName());
+        return stringBuffer.toString().trim();
+    }
+
+    public String mkUserTokenSaltKey(String tookenkey) {
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("Salt")
+                .append(":")
+                .append(tookenkey);
         return stringBuffer.toString().trim();
     }
 }

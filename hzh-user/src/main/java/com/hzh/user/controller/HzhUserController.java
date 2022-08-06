@@ -1,6 +1,7 @@
 package com.hzh.user.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.ResultVO;
@@ -42,7 +43,6 @@ public class HzhUserController {
     }
 
     @PostMapping("/user/register")
-    //public ResultVO register(@RequestParam(value = "mailCode",required = false)String mailCode,@RequestBody Map<String,Object> userMap) throws Exception {
     public ResultVO register(@RequestParam(value = "mailCode",required = false)String mailCode,@RequestBody HzhUser hzhUser) throws Exception {
 
         //TODO 前端post传递参数为空，为了继续学习，直接返回字符串
@@ -88,7 +88,7 @@ public class HzhUserController {
 
         HzhUser hzhUserInsert = new HzhUser();
         hzhUserInsert.setUserName(hzhUser.getUserName());
-        hzhUserInsert.setPassword(hzhUser.getPassword());
+        hzhUserInsert.setPassword(bCryptPasswordEncoder.encode(hzhUser.getPassword()));
         hzhUserInsert.setUserDescription(Constants.UserDescription.MEMEBR_USER);
         hzhUserInsert.setStatus(Constants.User.UNFORBIDDENT_STATE);
         hzhUserInsert.setEmail(hzhUser.getEmail());
@@ -100,6 +100,7 @@ public class HzhUserController {
         hzhUserInsert.setUserType(Constants.UserType.MEMEBR_USER);
         hzhUserInsert.setCreateTime(currentdate);
         hzhUserInsert.setUpdateBy(hzhUser.getUpdateBy());
+        hzhUserInsert.setSalt(IdWorker.getIdStr());
         hzhUserInsert.setUpdateTime(currentdate);
         hzhUserInsert.setDelFlag(Constants.User.UNFORBIDDENT_STATE);
 
@@ -133,6 +134,14 @@ public class HzhUserController {
              return ResultVO.okAndError(loginflag.getMsg());
          }
      }
+
+     //解析Token
+     @GetMapping("/user/getToken")
+    public ResultVO checkToken()throws Exception {
+         return hzhUserService.chechToken();
+
+     }
+
 
 
 

@@ -4,6 +4,9 @@ import com.anji.captcha.model.common.RepCodeEnum;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
+import com.hzh.common.enums.ResultEnum;
+import com.hzh.common.mapper.HzhUserMapper;
+import com.hzh.common.pojo.vo.LoginUserVo;
 import com.hzh.common.pojo.vo.ResultVO;
 import com.hzh.common.service.BaseService;
 import com.hzh.common.utils.DateUtils;
@@ -34,6 +37,9 @@ public class HzhUserExServiceImpl extends BaseService implements HzhUserExServic
     private RedisUtils redisUtils;
 
     @Resource
+    private HzhUserMapper hzhUserMapper;
+
+    @Resource
     private RedisKeyUtil redisKeyUtil;
 
     @Resource
@@ -48,7 +54,7 @@ public class HzhUserExServiceImpl extends BaseService implements HzhUserExServic
       * @return 
       **/
     @Override
-    public ResultVO sendEmailCode(String verfication,String emailAddress,boolean mustRegister) throws Exception {
+    public ResultVO sendEmailCode(String verfication,String emailAddress) throws Exception {
         String date = DateUtils.getCurrent(DateUtils.ticketPattern);
         log.info("String verfication ===> " +  verfication);
 
@@ -73,9 +79,7 @@ public class HzhUserExServiceImpl extends BaseService implements HzhUserExServic
             }
         }
 
-
-
-        log.info("email address {} must register {},",emailAddress,mustRegister);
+        log.info("email address {},",emailAddress);
         //检查数据是否正确
         if (TextUtils.isEmpty(emailAddress)) {
             //不可以为空
@@ -87,13 +91,6 @@ public class HzhUserExServiceImpl extends BaseService implements HzhUserExServic
             //邮箱格式不正确
             return ResultVO.ok("邮箱格式不正确，请检查邮箱格式");
         }
-        //根据标记检查邮箱是否正确  此时邮箱地址必须为未注册
-        if (mustRegister){
-            //TODO
-        }
-        //TODO 防止恶意频繁调用  可以通过IP，通过邮箱地址
-
-
 
         //ip地址  继承关系可以直接使用方法
         String remoteAddr = getRequest().getRemoteAddr();

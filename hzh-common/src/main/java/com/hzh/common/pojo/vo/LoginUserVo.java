@@ -11,8 +11,9 @@ public class LoginUserVo {
 
     private String id;
     private String sex;
+    private String salt;
     private String status;
-    private String avater;
+    private String avatar;
     private String password;
     private String userName;
 

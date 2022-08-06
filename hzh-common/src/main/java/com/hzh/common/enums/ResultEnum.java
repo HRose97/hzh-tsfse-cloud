@@ -17,12 +17,16 @@ public enum ResultEnum {
 
     INNER_EXCEPTION("EI0000", "系统内部异常！"),
     VALIDATE_ERROR("EV0001", "参数校验出错！"),
+    PASSWORD_MD5_ERROR("MD0001", "请使用MD5摘要算法对秘密进行转换！"),
 
-    CODE_ERROR("EV0002", "验证码校验出错！"),
+    //登录相关
     LOGIN_ERROR("LE0001","用户名或密码错误"),
     LOGIN_ACCOUNT_ERROR("LE0002","账号不存在"),
-
+    NOT_LOGIN_USER("LE0003","用户未登录"),
     LOGIN_DISABLED_USER("LE0002","登录用户已被禁用"),
+
+    //注册相关
+    REGUST_EMAIL_ISEXIST("ES0001","该邮箱已经注册"),
 
 
     SYSTEM_ERROR_NULL_HOST("ES0004","当前系统下没有主机"),
@@ -57,7 +61,7 @@ public enum ResultEnum {
     //repCode  6110  验证码已失效，请重新获取
     //repCode  6111  验证失败
     //repCode  6112  获取验证码失败,请联系管理员
-
+    CODE_ERROR("EV0002", "验证码校验出错！"),
     VERIFICATION_CODE_ERROR1("VC9999","服务器内部异常"),
     VERIFICATION_CODE_ERROR2("VC0011","参数不能为空"),
     VERIFICATION_CODE_ERROR3("VC6110","验证码已失效,请重新获取"),
