@@ -31,4 +31,20 @@ public interface HzhUserMapper extends BaseMapper<HzhUser> {
     LoginUserVo selectOneByEmail(@Param("email")String email);
 
     LoginUserVo selectOneByUserName(@Param("userName") String userName);
+
+    boolean updatePasswordByEmail(@Param("email")String email,
+                                  @Param("password")String encode);
+
+    boolean updateStateById(@Param("id")long id,
+                            @Param("status") String status,
+                            @Param("updateDate") String updateDate);
+
+    boolean delUserById(@Param("id")long id,
+                        @Param("delFlag") String delFlag,
+                        @Param("updateDate") String updateDate);
+
+    boolean reSetPasswordByAdmin(@Param("id")long id,
+                                 @Param("updateDate") String updateDate,
+                                 @Param("encode") String encode);
+
 }

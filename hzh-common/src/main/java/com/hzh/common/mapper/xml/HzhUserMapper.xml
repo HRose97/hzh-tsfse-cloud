@@ -94,4 +94,24 @@
         </where>
     </select>
 
+    <update id="updatePasswordByEmail">
+        UPDATE hzh_user set password = #{password} where email = #{email}
+    </update>
+
+    <update id="updateStateById">
+        UPDATE hzh_user set status = #{status} AND update_time = #{updateDate}
+        where id = #{id}
+    </update>
+
+    <update id="delUserById">
+        UPDATE hzh_user set del_flag = #{delFlag} AND update_time = #{updateDate}
+        where id = #{id}
+    </update>
+
+    <update id="delUserById">
+        UPDATE hzh_user set update_time = #{updateDate} AND password = #{encode}
+        where id = #{id}
+    </update>
+
+
 </mapper>

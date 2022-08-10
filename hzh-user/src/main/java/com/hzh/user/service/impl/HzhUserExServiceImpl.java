@@ -4,7 +4,6 @@ import com.anji.captcha.model.common.RepCodeEnum;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
-import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.mapper.HzhUserMapper;
 import com.hzh.common.pojo.vo.LoginUserVo;
 import com.hzh.common.pojo.vo.ResultVO;
@@ -149,4 +148,5 @@ public class HzhUserExServiceImpl extends BaseService implements HzhUserExServic
 
         return ResultVO.ok("邮箱验证发送成功");
     }
+
 }

@@ -8,4 +8,6 @@ import com.hzh.common.pojo.vo.ResultVO;
  */
 public interface HzhUserExService {
     ResultVO sendEmailCode(String verfication,String emailAddress) throws Exception;
+
+
 }

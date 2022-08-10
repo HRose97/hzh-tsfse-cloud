@@ -167,12 +167,12 @@ public class RedisKeyUtil {
         return stringBuffer.toString().trim();
     }
 
-    public String mkUserTokenSaltKey(String tookenkey) {
+    public String mkUserTokenSaltKey(String tokenkey) {
         StringBuffer stringBuffer = new StringBuffer("User");
         stringBuffer.append(":")
                 .append("Salt")
                 .append(":")
-                .append(tookenkey);
+                .append(tokenkey);
         return stringBuffer.toString().trim();
     }
 }

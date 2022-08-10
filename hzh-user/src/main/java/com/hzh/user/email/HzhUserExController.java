@@ -37,15 +37,11 @@ public class HzhUserExController {
       * @Param emailAddress  邮箱地址
       * @return
       **/
-
      @GetMapping("/register/emailCode")
-    public ResultVO sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
+     public ResultVO sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
                                       @RequestParam("email") String emailAddress) throws Exception {
          ResultVO emailCode = hzhUserExService.sendEmailCode(verification,emailAddress);
          return  ResultVO.ok(emailCode);
-    }
-
-
-
+     }
 
 }

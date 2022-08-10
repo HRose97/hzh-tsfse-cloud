@@ -2,6 +2,8 @@ package com.hzh.common.utils;
 
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginUserVo;
+import com.hzh.common.pojo.vo.UserVo;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,7 @@ import java.util.Map;
 public class ClaimsUtils {
 
 
-    public static Map<String,Object> user2Claims(LoginUserVo loginUserVo) {
+    public static Map<String,Object> user2Claims(UserVo loginUserVo) {
 
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",loginUserVo.getId());
@@ -23,19 +25,17 @@ public class ClaimsUtils {
         claims.put("salt",loginUserVo.getSalt());
         claims.put("status",loginUserVo.getStatus());
         claims.put("avatar",loginUserVo.getAvatar());
-        claims.put("password",loginUserVo.getPassword());
         claims.put("userName",loginUserVo.getUserName());
         return claims;
     }
 
-    public static LoginUserVo claims2toUser(Map<String,Object> claims) {
-        LoginUserVo hzhUser = new LoginUserVo();
+    public static UserVo claims2toUser(Map<String,Object> claims) {
+        UserVo hzhUser = new UserVo();
         String id = claims.get("id").toString();
         String sex = claims.get("sex").toString();
         String salt = claims.get("salt").toString();
         String status = claims.get("status").toString();
         String avatar = claims.get("avatar").toString();
-        String password = claims.get("password").toString();
         String userName = claims.get("userName").toString();
         hzhUser.setId(String.valueOf(Long.valueOf(id)));
         hzhUser.setSex(sex);
@@ -43,7 +43,6 @@ public class ClaimsUtils {
         hzhUser.setStatus(status);
         hzhUser.setAvatar(avatar);
         hzhUser.setUserName(userName);
-        hzhUser.setPassword(password);
         return hzhUser;
     }
 
