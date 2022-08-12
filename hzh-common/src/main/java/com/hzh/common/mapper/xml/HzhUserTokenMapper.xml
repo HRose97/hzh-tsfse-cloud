@@ -2,5 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzh.common.mapper.HzhUserTokenMapper">
 
+    <resultMap id="parameterMap" type="com.hzh.common.pojo.HzhUserToken">
+        <result column="id" property="id"></result>
+        <result column="userId" property="userId"></result>
+        <result column="refreshToken" property="refreshToken"></result>
+        <result column="tokenKey" property="tokenKey"></result>
+        <result column="loginFrom" property="loginFrom"></result>
+        <result column="appId" property="appId"></result>
+        <result column="createTime" property="createTime"></result>
+        <result column="updateTime" property="updateTime"></result>
+    </resultMap>
+
+    <select id="selectByUserId" resultType="com.hzh.common.pojo.HzhUserToken">
+        SELECT * FROM hzh_user_token WHERE 1=1 AND user_id = #{userId}
+    </select>
+
+    <update id="updateByUserId" parameterType="com.hzh.common.pojo.HzhUserToken">
+        UPDATE hzh_user_token
+        SET
+        refresh_token = #{refreshToken} ,
+        token_key = #{tokenKey} ,
+        login_from = #{loginFrom} ,
+        app_id = #{appId} ,
+        create_time = #{createTime} ,
+        update_time = #{updateTime}
+        <where>
+            1=1
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId}
+            </if>
+        </where>
+    </update>
+
 
 </mapper>

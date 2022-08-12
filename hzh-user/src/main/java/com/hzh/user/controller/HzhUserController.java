@@ -2,20 +2,20 @@ package com.hzh.user.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.HzhUser;
+import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.respone.R;
 import com.hzh.common.utils.*;
 import com.hzh.user.service.HzhUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import java.util.HashMap;
+
 
 
 /**
@@ -32,93 +32,36 @@ public class HzhUserController {
     @Resource
     private HzhUserService hzhUserService;
 
-    @Resource
-    private RedisUtils redisUtils;
-
-    @Resource
-    private RedisKeyUtil redisKeyUtil;
-
-    @Resource
-    private PasswordEncoder bCryptPasswordEncoder;
-
     @GetMapping("/test")
     public String test(){
         return "测试";
     }
 
+    /**
+     * @Author Hou zhonghu
+     * @Description  发送邮箱
+     * @Date 2022/7/29 10:41
+     * @Param emailAddress  邮箱地址
+     * @Param mustRegister 邮箱是否注册
+     * @return
+     **/
+    @GetMapping("/register/emailCode")
+    public R sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
+                               @RequestParam("email") String emailAddress) throws Exception {
+        return hzhUserService.sendEmailCode(verification,emailAddress,false);
+
+    }
+
+    /**
+     *  用户注册
+     * @param mailCode
+     * @param hzhUser
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/user/register")
-    public ResultVO register(@RequestParam(value = "mailCode",required = false)String mailCode,@RequestBody HzhUser hzhUser) throws Exception {
-
-        //TODO 前端post传递参数为空，为了继续学习，直接返回字符串
-        System.out.println(hzhUser);
-        HashMap<String,Object> result = new HashMap<>();
-        String currentdate = DateUtils.getCurrent(DateUtils.dateFullPattern);
-
-        // TODO 判断验证码是否正确
-        String codeRedisKey = redisKeyUtil.mkRegisterCodeRedisKey(hzhUser.getEmail());
-        String redisCode = redisUtils.get(codeRedisKey);
-        if ( redisCode == null || !redisCode.substring(26,32).equals(mailCode)){
-            return ResultVO.ok("验证码错误");
-        }
-        // 判断用户名是否被使用
-        HzhUser hasUsername = hzhUserService.findByUserName(hzhUser.getUserName());
-        if (hasUsername != null && hasUsername.getUserName().equals(hzhUser.getUserName())){
-            return ResultVO.ok("用户名已存在");
-        }
-        //判断邮箱是否以已经注册
-        HzhUser hasEmail = hzhUserService.findByEmail(hzhUser.getEmail());
-        if (hasEmail != null && hasEmail.getEmail().equals(hzhUser.getEmail())){
-            return ResultVO.ok("该邮箱已注册");
-        }
-
-        boolean isPhone = FormatCheckUtils.isMobile(hzhUser.getPhonenumber());
-        if (!isPhone ){
-            return ResultVO.ok("手机号格式错误");
-        }
-        HzhUser hzhPhone = hzhUserService.findByPhoneNum(hzhUser.getPhonenumber());
-        if (hzhPhone != null){
-            return ResultVO.ok("该手机号已注册");
-        }
-        //TODO 暂时不对密码强度校验
-/*        boolean b = FormatCheckUtils.checkPasswordRule(hzhUser.getPassword(),hzhUser.getUserName());
-        if (hzhUser.getPassword().length() < 8  ){
-            return ResultVO.ok("请至少输入8位数密码");
-        }if (!b){
-            return ResultVO.ok("密码不符和规则，请输入包括大小写字母、数字、特殊符号中的3种");
-        }*/
-
-        //密码加密
-        //String encode = bCryptPasswordEncoder.encode(hzhUser.getPassword());
-
-        HzhUser hzhUserInsert = new HzhUser();
-        hzhUserInsert.setUserName(hzhUser.getUserName());
-        hzhUserInsert.setPassword(bCryptPasswordEncoder.encode(hzhUser.getPassword()));
-        hzhUserInsert.setUserDescription(Constants.UserDescription.MEMEBR_USER);
-        hzhUserInsert.setStatus(Constants.User.UNFORBIDDENT_STATE);
-        hzhUserInsert.setEmail(hzhUser.getEmail());
-        hzhUserInsert.setPhonenumber(hzhUser.getPhonenumber());
-        //TODO 前端不会做单选男女 默认为男
-        hzhUserInsert.setSex("1");
-        //设置默认头像
-        hzhUserInsert.setAvatar("https://www.manpingou.com/uploads/allimg/170221/25-1F221135231E5.jpg");
-        hzhUserInsert.setUserType(Constants.UserType.MEMEBR_USER);
-        hzhUserInsert.setCreateTime(currentdate);
-        hzhUserInsert.setUpdateBy(hzhUser.getUpdateBy());
-        hzhUserInsert.setSalt(IdWorker.getIdStr());
-        hzhUserInsert.setUpdateTime(currentdate);
-        hzhUserInsert.setDelFlag(Constants.User.UNFORBIDDENT_STATE);
-
-        int add = hzhUserService.addUser(hzhUserInsert);
-        if(add == 1){
-            result.put("res","1");
-            result.put("msg","用户注册成功");
-            return ResultVO.ok(result);
-        }else {
-            result.put("res","0");
-            result.put("msg","用户注册失败");
-            return ResultVO.ok(result);
-        }
-
+    public R registerUser(@RequestParam(value = "mailCode",required = false)String mailCode, @RequestBody HzhUser hzhUser) throws Exception {
+        return hzhUserService.registerUser(mailCode,hzhUser);
     }
 
 
@@ -130,17 +73,13 @@ public class HzhUserController {
       * @return 
       **/
      @PostMapping("/user/login")
-      public ResultVO userLogin(@RequestBody HzhUser loginUser,@RequestParam("verification")String  verification) throws Exception {
-         ResultVO loginflag = hzhUserService.login(loginUser,verification);
-         if (loginflag.getCode().equals("AAAAAA")){
-             return ResultVO.ok("登录成功");
-         }else {
-             return ResultVO.okAndError(loginflag.getMsg());
-         }
+      public R userLogin(@RequestBody LoginVo loginVo, @RequestParam("verification")String  verification) throws Exception {
+         return hzhUserService.login(loginVo,verification);
      }
+
      //解析Token
-     @GetMapping("/user/getToken")
-     public ResultVO checkToken()throws Exception {
+     @GetMapping("/user/checkToken")
+     public R checkToken() throws Exception {
          return hzhUserService.chechToken();
      }
 

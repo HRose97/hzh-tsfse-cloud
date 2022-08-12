@@ -3,8 +3,10 @@ package com.hzh.user.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.HzhUser;
+import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.respone.R;
 
 /**
  * @author Hou Zhonghu
@@ -12,6 +14,7 @@ import com.hzh.common.pojo.vo.ResultVO;
  */
 public interface HzhUserService {
 
+    R sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception;
 
     int addUser(HzhUser hzhUser);
 
@@ -19,11 +22,11 @@ public interface HzhUserService {
 
     HzhUser findByEmail(String email);
 
-    ResultVO login(HzhUser loginUser, String verification) throws Exception;
+    R login(LoginVo loginVo, String verification) throws Exception;
 
     HzhUser findByPhoneNum(String phonenumber);
 
-    ResultVO chechToken() throws Exception;
+    R chechToken() throws Exception;
 
     ResultVO logout() throws Exception;
 
@@ -38,4 +41,8 @@ public interface HzhUserService {
     boolean delUserById(long id, String delFlag,String updateDate);
 
     ResultVO reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception;
+
+    R registerUser(String mailCode, HzhUser hzhUser) throws Exception;
+
+
 }

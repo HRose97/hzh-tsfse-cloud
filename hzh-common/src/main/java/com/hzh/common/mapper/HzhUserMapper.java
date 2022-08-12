@@ -2,7 +2,7 @@ package com.hzh.common.mapper;
 
 import com.hzh.common.pojo.HzhUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzh.common.pojo.vo.LoginUserVo;
+import com.hzh.common.pojo.vo.LoginBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,20 +17,17 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface HzhUserMapper extends BaseMapper<HzhUser> {
 
-    LoginUserVo selectOneByFilter(@Param("userName") String userName,
+    LoginBean selectOneByFilter(@Param("userName") String userName,
                                   @Param("email")String email,
                                   @Param("phonenumber")String phonenumber);
 
-
-
     HzhUser selectByFilter(HzhUser hzhUser);
 
+    LoginBean selectOneByPhone( @Param("phonenumber")String phonenumber);
 
-    LoginUserVo selectOneByPhone( @Param("phonenumber")String phonenumber);
+    LoginBean selectOneByEmail(@Param("email")String email);
 
-    LoginUserVo selectOneByEmail(@Param("email")String email);
-
-    LoginUserVo selectOneByUserName(@Param("userName") String userName);
+    HzhUser selectOneByUserName(@Param("userName") String userName);
 
     boolean updatePasswordByEmail(@Param("email")String email,
                                   @Param("password")String encode);
@@ -46,5 +43,6 @@ public interface HzhUserMapper extends BaseMapper<HzhUser> {
     boolean reSetPasswordByAdmin(@Param("id")long id,
                                  @Param("updateDate") String updateDate,
                                  @Param("encode") String encode);
+
 
 }

@@ -4,17 +4,18 @@ import lombok.Data;
 
 /**
  * @author Hou Zhonghu
- * @since 2022/8/12 16:26
+ * @since 2022/8/11 17:01
  */
 @Data
-public class UserVo{
+public class LoginVo{
 
     private String id;
     private String email;
     private String sex;
+    private String salt;
     private String status;
-    private String phonenumber;
-    private String avatar;
     private String userName;
+    private String password;
+
 
 }

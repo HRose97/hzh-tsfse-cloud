@@ -19,6 +19,10 @@ public interface Constants {
         //普通用户
         String MEMBER_USER="会员";
 
+        //token的key
+        String KEY_TOKEN = "key_token_";
+        String TSFSE_TOKEN = "tsfse_token";
+
     }
 
 

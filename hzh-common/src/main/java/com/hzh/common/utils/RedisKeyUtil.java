@@ -4,15 +4,8 @@ import com.hzh.common.pojo.CoachInfo;
 import com.hzh.common.pojo.EventInfo;
 import com.hzh.common.pojo.HzhOrder;
 import com.hzh.common.pojo.HzhUser;
-import com.hzh.common.pojo.vo.LoginUserVo;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import com.hzh.common.pojo.vo.LoginBean;
 import org.springframework.stereotype.Component;
-
-
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
 @Component
@@ -143,22 +136,7 @@ public class RedisKeyUtil {
         return stringBuffer.toString().trim();
     }
 
-
-    /**
-     * 生成用户登录token键名
-     * @param
-     * @return
-     */
-    public String mkLoginTokenKey(String tokenKey) throws Exception{
-        StringBuffer stringBuffer = new StringBuffer("User");
-        stringBuffer.append(":")
-                .append("Login")
-                .append(":")
-                .append(tokenKey);
-        return stringBuffer.toString().trim();
-    }
-
-    public String mkCookieKey(LoginUserVo hasUserByUserName) {
+    public String mkCookieKey(LoginBean hasUserByUserName) {
         StringBuffer stringBuffer = new StringBuffer("User");
         stringBuffer
                 .append("Cookie")
