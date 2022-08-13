@@ -136,6 +136,20 @@ public class RedisKeyUtil {
         return stringBuffer.toString().trim();
     }
 
+    /**
+     * 生成用户注册验证码键名
+     * @param
+     * @return
+     */
+    public String mkForgotCodeRedisKey(String emailAddress) throws Exception{
+        StringBuffer stringBuffer = new StringBuffer("User");
+        stringBuffer.append(":")
+                .append("forgot")
+                .append(":")
+                .append(emailAddress);
+        return stringBuffer.toString().trim();
+    }
+
     public String mkCookieKey(LoginBean hasUserByUserName) {
         StringBuffer stringBuffer = new StringBuffer("User");
         stringBuffer

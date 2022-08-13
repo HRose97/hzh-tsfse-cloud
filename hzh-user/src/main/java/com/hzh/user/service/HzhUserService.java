@@ -28,9 +28,9 @@ public interface HzhUserService {
 
     R chechToken() throws Exception;
 
-    ResultVO logout() throws Exception;
+    R logout() throws Exception;
 
-    ResultVO reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
+    R reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
 
     IPage<HzhUser> findAllByPage(Page<HzhUser> page);
 
@@ -45,4 +45,5 @@ public interface HzhUserService {
     R registerUser(String mailCode, HzhUser hzhUser) throws Exception;
 
 
+    R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception;
 }

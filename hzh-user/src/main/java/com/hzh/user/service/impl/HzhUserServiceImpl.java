@@ -62,7 +62,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
     @Resource
     private PasswordEncoder bCryptPasswordEncoder;
 
-    //发送邮箱验证码
+    //新用户发送邮箱验证码
     @Override
     public R sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception {
         String date = DateUtils.getCurrent(DateUtils.ticketPattern);
@@ -160,6 +160,116 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         return R.SUCCESS("邮箱验证发送成功");
     }
 
+    //找回密码发送邮箱验证码
+    @Override
+    public R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception {
+        String date = DateUtils.getCurrent(DateUtils.ticketPattern);
+        log.info("String verfication ===> " +  verification);
+
+        CaptchaVO captchaVO = new CaptchaVO();
+        captchaVO.setCaptchaVerification(verification);
+        //这种验证方式是会删除只能验证一次
+        ResponseModel response = captchaService.verification(captchaVO);
+        String repCode = response.getRepCode();
+        //System.out.println("repCode ===> "+repCode);
+        if(response.isSuccess() == false){
+            //验证码校验失败，返回信息告诉前端
+            //repCode  0000  无异常，代表成功
+            //repCode  9999  服务器内部异常
+            //repCode  0011  参数不能为空
+            //repCode  6110  验证码已失效，请重新获取
+            //repCode  6111  验证失败
+            //repCode  6112  获取验证码失败,请联系管理员
+            if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
+                return R.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+            }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
+                return R.FAILED("图灵码验证失败");
+            }
+        }
+
+        log.info("email address {},",emailAddress);
+        //检查数据是否正确
+        if (TextUtils.isEmpty(emailAddress)) {
+            //不可以为空
+            return R.FAILED("邮箱地址不可以为空");
+        }
+        //对邮箱地址校验
+        boolean isEmailTrue = FormatCheckUtils.isEmail(emailAddress);
+        if (!isEmailTrue){
+            //邮箱格式不正确
+            return R.FAILED("邮箱格式不正确，请检查邮箱格式");
+        }
+        //mustRegister 不管是trut or false 都要对邮箱进行检查是否存在
+        QueryWrapper<HzhUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email",emailAddress);
+        queryWrapper.select("id");
+        HzhUser selectOne = hzhUserMapper.selectOne(queryWrapper);
+        if (selectOne != null && mustRegister){
+            return R.FAILED("该邮箱已经注册");
+        }
+        if (selectOne == null && !mustRegister){
+            return R.FAILED("该邮箱未注册");
+        }
+
+
+        //ip地址  继承关系可以直接使用方法
+        String remoteAddr = getRequest().getRemoteAddr();
+        remoteAddr = remoteAddr.replaceAll(":", "-");
+        log.info("客户端Ip地址为 ...{}",remoteAddr);
+
+        //通过ip地址判断是否频繁发送
+        String registerIpRedisKey = redisKeyUtil.mkRegisterIPRedisKey(remoteAddr);
+        String ipKeyTimes = redisUtils.get(registerIpRedisKey);
+        if (!StringUtils.isEmpty(ipKeyTimes)){
+            int i = Integer.parseInt(ipKeyTimes);
+            log.info("当前ip{}调用了{}次",remoteAddr,i);
+            if (i > 100){
+                return R.FAILED("请不要通过此ip"+remoteAddr+"频繁发送");
+            }else {
+                i++;
+                //2  时间数量   TimeUnit.HOURS 时间单位
+                redisUtils.set(registerIpRedisKey,String.valueOf(i), 2, TimeUnit.HOURS);
+            }
+        }else {
+            //俩小时内有校
+            redisUtils.set(registerIpRedisKey,"1",2,TimeUnit.HOURS);
+        }
+
+        //通过邮箱账号判断是否频繁发送
+        String registerEmailRedisKey = redisKeyUtil.mkRegisterEmailRedisKey(emailAddress);
+        String emailKeyTimes = redisUtils.get(registerEmailRedisKey);
+        if (!StringUtils.isEmpty(emailKeyTimes)){
+            int i = Integer.parseInt(emailKeyTimes);
+            log.info("当前邮箱{}已经调用了{}次",emailAddress,i);
+            //TODO 次数是属于配置项 一般都不是写死得 需要抽取出来到可配置得地方
+            if (i > 100){
+                return R.FAILED("请不要通过此邮箱账号"+emailAddress+"频繁发送");
+            }else {
+                i++;
+                //2  时间数量   TimeUnit.HOURS 时间单位
+                redisUtils.set(registerEmailRedisKey,String.valueOf(i), 2, TimeUnit.HOURS);
+            }
+        }else {
+            //俩小时内有校
+            redisUtils.set(registerEmailRedisKey,"1",2, TimeUnit.HOURS);
+        }
+        //产生验证码，记录验证码
+        Random random = new Random();
+        //产生6位数  取值范围（0，999999） 有可能只有1位  可以通过+100000的方式得到俩位数的验证码
+        int mailCode = random.nextInt(999999);
+        if (mailCode < 100000){
+            mailCode += 100000;
+        }
+        log.info("六位数的验证码为：{}",mailCode);
+        //保存到redis中  验证码5min有效
+        String codeRedisKey = redisKeyUtil.mkForgotCodeRedisKey(emailAddress);
+        redisUtils.set(codeRedisKey, date +"的找回密码得验证码："+mailCode,5,TimeUnit.MINUTES);
+        //TODO  实际注册时放开  发送验证码
+        //EmailSender.sendEmailSendCode(emailAddress, "注册验证码："+ mailCode +",5分钟内有效！");
+
+        return R.SUCCESS("邮箱验证发送成功");
+    }
+
     //注册用户
     @Override
     public int addUser(HzhUser hzhUserInsert) {
@@ -231,27 +341,23 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     //退出登录
     @Override
-    public ResultVO logout() throws Exception {
-/*        String tokenkey = CookieUtils.getCookie(getRequest(), cookieTokenName);
+    public R logout() throws Exception {
+        String tokenkey = CookieUtils.getCookie(getRequest(), cookieTokenName);
         if (StringUtils.isEmpty(tokenkey)){
-            return ResultVO.status(ResultEnum.NOT_LOGIN_USER);
+            return R.NOT_LOGIN();
         }else {
             //删除token
-
-            redisUtils.delete(mkLoginTokenKey);
+            redisUtils.delete(Constants.User.KEY_TOKEN + tokenkey);
             //删除refseToken
             QueryWrapper queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("tokey_key",tokenkey);
             hzhUserTokenMapper.delete(queryWrapper);
             //删除cookie
-            CookieUtils.setUpCookie(getResponse(),cookieTokenName,"");
+            CookieUtils.setUpCookie(getResponse(),Constants.User.TSFSE_TOKEN,"");
             //删除redis中的盐值
-
-            String saltKey = redisKeyUtil.mkUserTokenSaltKey(token);
-            redisUtils.delete(saltKey);
-            return ResultVO.ok("退出登录成功");
-        }*/
-        return null;
+            redisUtils.delete(Constants.User.KEY_TOKEN + tokenkey);
+            return R.SUCCESS("退出登录成功");
+        }
     }
 
     //让用户强制下线
@@ -380,10 +486,10 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 boolean matches = bCryptPasswordEncoder.matches(password, hasHzhUser.getPassword());
                 if (matches) {
                     createToken(hasHzhUser);
-                    LoginBean userVo = new LoginBean();
+                    UserVo userVo = new UserVo();
                     userVo.setAvatar(hasHzhUser.getAvatar());
                     userVo.setUserName(hasHzhUser.getUserName());
-                    return R.SUCCESS("登录成功");
+                    return R.SUCCESS("登录成功",userVo);
                 } else {
                     return R.FAILED("用户名或密码错误");
                 }
@@ -458,35 +564,36 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     }
 
-    //修改密码
+    //重置密码
     @Override
-    public ResultVO reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public R reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
 
         if (StringUtils.isEmpty(mailCode) || reSetPasswordVo == null){
-            return ResultVO.status(ResultEnum.VALIDATE_ERROR);
+            return R.FAILED("参数不可以为空");
         }else {
             QueryWrapper queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("email",reSetPasswordVo.getEmail());
             HzhUser hzhUser = hzhUserMapper.selectOne(queryWrapper);
             if (hzhUser != null){
                 //对验证码进行比对
-                String registerEmailRedisKey = redisKeyUtil.mkRegisterEmailRedisKey(reSetPasswordVo.getEmail());
+                String registerEmailRedisKey = redisKeyUtil.mkForgotCodeRedisKey(reSetPasswordVo.getEmail());
                 String code = redisUtils.get(registerEmailRedisKey);
-                if (code.equals(mailCode)){
+                //2022.08.13 17:59:19的找回密码得验证码：884726
+                if (mailCode.equals(code.substring(29,35))){
                     String encode = bCryptPasswordEncoder.encode(reSetPasswordVo.getPassword());
                     boolean update = hzhUserMapper.updatePasswordByEmail(reSetPasswordVo.getEmail(),encode);
                     if (update){
                         //跟新成功以后退出登录
                         logout();
-                        return ResultVO.ok("密码修改成功");
+                        return R.SUCCESS("密码修改成功");
                     }else {
-                        return ResultVO.status(ResultEnum.UPDATE_PASSWORD_ERROR);
+                        return R.FAILED("密码修改失败");
                     }
                 }else {
-                    return ResultVO.status(ResultEnum.CODE_ERROR);
+                    return R.FAILED("验证码错误");
                 }
             }else {
-                return ResultVO.status(ResultEnum.REGUST_EMAIL_NOTISEXIST);
+                return R.FAILED("该邮箱未查询到用户");
             }
         }
     }
@@ -614,6 +721,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             return R.FAILED("用户注册失败");
         }
     }
+
 
 
 }

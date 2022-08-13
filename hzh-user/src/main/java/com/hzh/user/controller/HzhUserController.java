@@ -39,7 +39,7 @@ public class HzhUserController {
 
     /**
      * @Author Hou zhonghu
-     * @Description  发送邮箱
+     * @Description  用户注册发送邮箱
      * @Date 2022/7/29 10:41
      * @Param emailAddress  邮箱地址
      * @Param mustRegister 邮箱是否注册
@@ -49,6 +49,21 @@ public class HzhUserController {
     public R sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
                                @RequestParam("email") String emailAddress) throws Exception {
         return hzhUserService.sendEmailCode(verification,emailAddress,false);
+
+    }
+
+    /**
+     * @Author Hou zhonghu
+     * @Description  发送邮箱
+     * @Date 2022/7/29 10:41
+     * @Param emailAddress  邮箱地址
+     * @Param mustRegister 邮箱是否注册
+     * @return
+     **/
+    @GetMapping("/forget/emailCode")
+    public R sendReSetPasswordEmail(@RequestParam(value = "verification",required = false)String verification,
+                               @RequestParam("email") String emailAddress) throws Exception {
+        return hzhUserService.sendReSetPasswordEmail(verification,emailAddress,false);
 
     }
 
@@ -85,13 +100,13 @@ public class HzhUserController {
 
      //退出登录
      @GetMapping("/user/logout")
-     public ResultVO loginOut() throws Exception {
+     public R loginOut() throws Exception {
          return hzhUserService.logout();
      }
 
     //修改密码   用户自己修改
-    @PutMapping("/user/reSetPassword")
-    public ResultVO reRendEmail(@RequestParam(value = "mailCode",required = false)String mailCode,
+    @PutMapping("/user/reSetPasswordBySelf")
+    public R reRendEmail(@RequestParam(value = "mailCode",required = false)String mailCode,
                                 @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
         return  hzhUserService.reSetPassword(mailCode,reSetPasswordVo);
     }
