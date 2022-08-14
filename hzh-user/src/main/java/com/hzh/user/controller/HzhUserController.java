@@ -107,74 +107,8 @@ public class HzhUserController {
     //修改密码   用户自己修改
     @PutMapping("/user/reSetPasswordBySelf")
     public R reRendEmail(@RequestParam(value = "mailCode",required = false)String mailCode,
-                                @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
-        return  hzhUserService.reSetPassword(mailCode,reSetPasswordVo);
+                         @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
+        return  hzhUserService.reSetPasswordBySelf(mailCode,reSetPasswordVo);
     }
-
-    //重置密码  管理员重置
-    @GetMapping("/user/reSetPasswordByAdmin")
-    public ResultVO reSetPasswordByAdmin(@RequestParam(value = "id")String id,
-                                         @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
-        return hzhUserService.reSetPasswordByAdmin(id,reSetPasswordVo);
-    }
-
-
-    //分页查询
-    @GetMapping("/user/getAllUserByPage")
-    public ResultVO getAllUserByPage(@RequestParam("current")String current,@RequestParam("size")String size){
-        if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
-            Page<HzhUser> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
-            IPage<HzhUser> hzhUserIPage = hzhUserService.findAllByPage(page);
-            return ResultVO.ok(hzhUserIPage);
-        }else {
-            return null;
-        }
-    }
-
-    //禁用用户
-    @PutMapping("/user/disableUserById")
-    public ResultVO disableUserById(@RequestParam("id")String id,@RequestParam("status")String status){
-        String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
-        if ( !StringUtils.isEmpty(id) ){
-             HzhUser findByfilter = hzhUserService.findByFitler(Long.parseLong(id));
-            if (findByfilter != null && findByfilter.getDelFlag().equals("0")){
-                //0 启用  1禁用  要在未删除的情况下   0未删除  1删除
-                boolean updateState = hzhUserService.updateByState(Long.parseLong(id),status,updateDate);
-                if (updateState){
-                    return ResultVO.ok();
-                }else {
-                    return ResultVO.status(ResultEnum.INNER_EXCEPTION);
-                }
-            }else {
-                return ResultVO.status(ResultEnum.VALIDATE_ERROR);
-            }
-        }else {
-            return ResultVO.status(ResultEnum.VALIDATE_ERROR);
-        }
-    }
-
-    //删除用户
-    @PutMapping("/user/delUserById")
-    public ResultVO delUserById(@RequestParam("id")String id,@RequestParam("delFlag")String delFlag){
-        String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
-        if ( !StringUtils.isEmpty(id) ){
-            HzhUser findByfilter = hzhUserService.findByFitler(Long.parseLong(id));
-            if (findByfilter != null ){
-                // 0未删除  1删除
-                boolean updateState = hzhUserService.delUserById(Long.parseLong(id),delFlag,updateDate);
-                if (updateState){
-                    return ResultVO.ok();
-                }else {
-                    return ResultVO.status(ResultEnum.INNER_EXCEPTION);
-                }
-            }else {
-                return ResultVO.ok(ResultEnum.VALIDATE_ERROR);
-            }
-        }else {
-            return ResultVO.status(ResultEnum.VALIDATE_ERROR);
-        }
-    }
-
-
 
 }

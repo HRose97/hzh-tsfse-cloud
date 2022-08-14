@@ -25,4 +25,6 @@ public interface OrderService {
     int updateById(String id, String state);
 
     List<HzhOrder> selectList(Object o);
+
+    IPage<HzhOrder> getAllOrderByPage(Page<HzhOrder> page);
 }

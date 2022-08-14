@@ -59,4 +59,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderInfoMapper,HzhOrder> impl
     public List<HzhOrder> selectList(Object o) {
         return orderInfoMapper.selectList(null);
     }
+
+    //分页查询订单
+    @Override
+    public IPage<HzhOrder> getAllOrderByPage(Page<HzhOrder> page) {
+        Page<HzhOrder> hzhOrderPage = orderInfoMapper.selectPage(page, null);
+        return hzhOrderPage;
+    }
 }

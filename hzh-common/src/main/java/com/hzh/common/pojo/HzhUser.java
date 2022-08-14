@@ -50,8 +50,12 @@ public class HzhUser implements Serializable {
     private String sex;
 
     private String salt;
+
     //@ApiModelProperty(value = "头像")
     private String avatar;
+
+    //会员等级  0 大众会员 1 黄金会员 2 铂金会员  3 钻石会员
+    private String level;
 
     //@ApiModelProperty(value = "用户类型（eventman 体育类型管理用户，sportstypeman 体育类型管理用户，teamsman 球队管理用户，admin  用户管理， visitor 访客 ， member 会员）")
     private String userType;

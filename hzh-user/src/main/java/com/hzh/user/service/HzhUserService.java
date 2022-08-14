@@ -5,8 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
-import com.hzh.common.pojo.vo.ResultVO;
 import com.hzh.common.respone.R;
+
+import java.util.List;
 
 /**
  * @author Hou Zhonghu
@@ -30,20 +31,24 @@ public interface HzhUserService {
 
     R logout() throws Exception;
 
-    R reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
+    R reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
 
     IPage<HzhUser> findAllByPage(Page<HzhUser> page);
 
-    HzhUser findByFitler(long id);
+    HzhUser findByUserId(long id);
 
     boolean updateByState(long parseLong, String status,String updateDate);
 
     boolean delUserById(long id, String delFlag,String updateDate);
 
-    ResultVO reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception;
+    R reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception;
 
     R registerUser(String mailCode, HzhUser hzhUser) throws Exception;
 
 
     R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception;
+
+    R initAdminAccount(HzhUser hzhUser);
+
+    IPage<HzhUser> selectListByFilter(Page<HzhUser> page, HzhUser hzhUser);
 }

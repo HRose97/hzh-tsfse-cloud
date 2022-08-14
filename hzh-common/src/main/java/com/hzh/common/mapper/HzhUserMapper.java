@@ -1,5 +1,6 @@
 package com.hzh.common.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.HzhUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzh.common.pojo.vo.LoginBean;
@@ -45,4 +46,5 @@ public interface HzhUserMapper extends BaseMapper<HzhUser> {
                                  @Param("encode") String encode);
 
 
+    Page<HzhUser> selectListByFilter(Page<HzhUser> page, HzhUser hzhUser);
 }

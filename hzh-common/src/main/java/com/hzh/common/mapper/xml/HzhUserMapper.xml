@@ -113,5 +113,20 @@
         where id = #{id}
     </update>
 
+    <select id="selectListByFilter" parameterType="com.hzh.common.pojo.HzhUser" resultType="com.hzh.common.pojo.HzhUser">
+        SELECT id,user_name,user_description,
+               status,email,phonenumber,sex,avatar,
+               level,user_type,create_time,update_by,
+               update_time,del_flag
+        FROM hzh_user WHERE
+                (del_flag = "0")
+                OR user_name like #{%hzhUser.userName%}
+                OR email = #{hzhUser.email}
+                OR phonenumber = #{hzhUser.phonenumber}
+                OR user_type = #{hzhUser.userType}
+                OR status = #{hzhUser.status}
+        LIMIT 1,10
+    </select>
+
 
 </mapper>

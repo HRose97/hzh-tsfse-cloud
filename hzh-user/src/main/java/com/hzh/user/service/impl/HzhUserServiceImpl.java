@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -361,7 +362,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
     }
 
     //让用户强制下线
-    public ResultVO logoutById(String userId) throws Exception {
+    public R logoutById(String userId) throws Exception {
 /*        //可以通过userId 到refreshToken的表中查询到相关数据，然后退出登录
         QueryWrapper queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);
@@ -386,8 +387,6 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         }*/
         return null;
     }
-
-
 
     /**
      * 从数据库中找到refretoken  如果没有那就真的没有登录
@@ -427,7 +426,6 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         }
         return R.NOT_LOGIN();
     }
-
 
     //登录
     @Override
@@ -564,9 +562,70 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     }
 
-    //重置密码
+    //分页查询用户
     @Override
-    public R reSetPassword(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public IPage<HzhUser> findAllByPage(Page<HzhUser> page) {
+        QueryWrapper<HzhUser> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("del_flag",0);
+        Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
+        return hzhUserPage;
+    }
+
+    //根据用户ID查询用户
+    @Override
+    public HzhUser findByUserId(long id) {
+        return hzhUserMapper.selectById(id);
+    }
+
+    //修改用户状态
+    @Override
+    public boolean updateByState(long id, String status,String updateDate) {
+        boolean undateState = hzhUserMapper.updateStateById(id,status,updateDate);
+        return undateState;
+    }
+
+    //根据用户ID删除用户
+    @Override
+    public boolean delUserById(long id, String delFlag,String updateDate) {
+        boolean delById = hzhUserMapper.delUserById(id,delFlag,updateDate);
+        return delById;
+    }
+
+    /**
+     *
+     * 管理员重置用户
+     * 对密码进行处理
+     * 修改密码
+     * 让用户退出登录
+     * @param id
+     * @return
+     */
+    @Override
+    public R reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception {
+        String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
+
+        HzhUser hzhUser = hzhUserMapper.selectById(id);
+        if (hzhUser != null){
+            if (StringUtils.isEmpty(reSetPasswordVo.getPassword()) || reSetPasswordVo.getPassword().length() != 32){
+                return R.FAILED("密码校验出错");
+            }else {
+                String encode = bCryptPasswordEncoder.encode(reSetPasswordVo.getPassword());
+                boolean b = hzhUserMapper.reSetPasswordByAdmin(Long.parseLong(id), updateDate, encode);
+                if (b){
+                    R r = logoutById(id);
+                    return R.SUCCESS("密码重置成功",r);
+                }else {
+                    return R.FAILED("密码重置失败");
+                }
+            }
+        }else {
+            return R.FAILED("账号不存在");
+        }
+    }
+
+    //用户自身修改密码
+    @Override
+    public R reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
 
         if (StringUtils.isEmpty(mailCode) || reSetPasswordVo == null){
             return R.FAILED("参数不可以为空");
@@ -598,62 +657,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         }
     }
 
-    @Override
-    public IPage<HzhUser> findAllByPage(Page<HzhUser> page) {
-        QueryWrapper<HzhUser> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("del_flag",0);
-        Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
-        return hzhUserPage;
-    }
-
-    @Override
-    public HzhUser findByFitler(long id) {
-        return hzhUserMapper.selectById(id);
-    }
-
-    @Override
-    public boolean updateByState(long id, String status,String updateDate) {
-        boolean undateState = hzhUserMapper.updateStateById(id,status,updateDate);
-        return undateState;
-    }
-
-    @Override
-    public boolean delUserById(long id, String delFlag,String updateDate) {
-        boolean delById = hzhUserMapper.delUserById(id,delFlag,updateDate);
-        return delById;
-    }
-
-    /**
-     *
-     * 管理员重置用户
-     * 对密码进行处理
-     * 修改密码
-     * 让用户退出登录
-     * @param id
-     * @return
-     */
-    @Override
-    public ResultVO reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception {
-        String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
-
-        HzhUser hzhUser = hzhUserMapper.selectById(id);
-        if (hzhUser == null){
-            return ResultVO.status(ResultEnum.LOGIN_ACCOUNT_ERROR);
-        }
-
-        if (StringUtils.isEmpty(reSetPasswordVo.getPassword()) || reSetPasswordVo.getPassword().length() != 32){
-            return ResultVO.status(ResultEnum.PASSWORD_ERROR);
-        }else {
-            String encode = bCryptPasswordEncoder.encode(reSetPasswordVo.getPassword());
-            boolean b = hzhUserMapper.reSetPasswordByAdmin(Long.parseLong(id), updateDate, encode);
-            if (b){
-                ResultVO resultVO = logoutById(id);
-                return resultVO;
-            }
-        }
-        return ResultVO.status(ResultEnum.INNER_EXCEPTION);
-    }
-
+    //用户注册
     @Override
     public R registerUser(String mailCode, HzhUser hzhUser) throws Exception {
         String currentdate = DateUtils.getCurrent(DateUtils.dateFullPattern);
@@ -722,6 +726,26 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         }
     }
 
+    //创建超级管理员
+    @Override
+    public R initAdminAccount(HzhUser hzhUser) {
+        return null;
+    }
+
+    //根据条件查询并分页
+    @Override
+    public IPage<HzhUser> selectListByFilter(Page<HzhUser> page, HzhUser hzhUser) {
+        //只查询未删除的用户
+        QueryWrapper<HzhUser> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("del_flag",0)
+                .or().like("user_name",hzhUser.getUserName())
+                .or().eq("phonenumber",hzhUser.getPhonenumber())
+                .or().eq("status",hzhUser.getStatus())
+                .or().eq("user_type",hzhUser.getUserType())
+                .or().eq("email",hzhUser.getEmail());
+        Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
+        return hzhUserPage;
+    }
 
 
 }

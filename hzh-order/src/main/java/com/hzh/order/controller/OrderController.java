@@ -1,10 +1,13 @@
 package com.hzh.order.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.HzhOrder;
+import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.respone.R;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.common.utils.RedisKeyUtil;
 import com.hzh.common.utils.RedisUtils;
@@ -12,10 +15,7 @@ import com.hzh.order.service.OrderService;
 import com.hzh.order.service.PaymentInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -43,10 +43,21 @@ public class OrderController {
     @Resource
     public RedisUtils redisUtils;
 
+    //分页查询订单信息
+    @GetMapping("/orderInfo/getAllOrderByPage")
+    public R getAllOrderByPage(@RequestParam("current")String current,@RequestParam("size")String size){
+        if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
+            Page<HzhOrder> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
+            IPage<HzhOrder> orderByPage = orderService.getAllOrderByPage(page);
+            return R.SUCCESS("查询成功",orderByPage);
+        }else {
+            return R.FAILED("查询失败");
+        }
+    }
 
 
     @PostMapping("/orderInfo/curd")
-    public ResultVO OrderCURD(@RequestBody Map map) throws Exception {
+    public R OrderCURD(@RequestBody Map map) throws Exception {
 
 
         RedisKeyUtil redisKeyUtil = new RedisKeyUtil();
@@ -88,15 +99,15 @@ public class OrderController {
                 int size = null == map.get("size") ? 10 : Integer.parseInt(map.get("size").toString());
                 Page<HzhOrder> page = new Page<>(current, size);
                 IPage<HzhOrder> orderInfoIPage = orderService.selectPage(page);
-                return ResultVO.ok(orderInfoIPage);
+                return R.SUCCESS("查询成功",orderInfoIPage);
 
             case "2":
                 //根据id查询
                 HzhOrder hzhOrder = orderService.selectByOrderId(orderId);
                 if (hzhOrder != null ){
-                    return ResultVO.ok(hzhOrder);
+                    return R.SUCCESS("查询成功",hzhOrder);
                 }else {
-                    return ResultVO.okAndNull();
+                    return R.FAILED("查询失败");
                 }
 
             case "3":
@@ -164,13 +175,9 @@ public class OrderController {
                 int insert = orderService.insert(orderInfoInsert);
 
                 if (insert > 0) {
-                    result.put("msg", "新增" + insert + "条数据成功");
-                    result.put("state", "1");
-                    return ResultVO.ok(result);
+                    return R.SUCCESS("新增成功");
                 } else {
-                    result.put("msg", "新增" + insert + "条数据失败");
-                    result.put("state", "0");
-                    return ResultVO.ok(result);
+                    return R.FAILED("新增失败");
                 }
 
             case "4":
@@ -204,18 +211,13 @@ public class OrderController {
                     boolean update = orderService.updateById(orderInfoUpdata);
 
                     if (update) {
-                        result.put("msg", "更新数据成功");
-                        result.put("state", "1");
-                        return ResultVO.ok(result);
+                        return R.SUCCESS("更新成功");
                     } else {
-                        log.info("更新失败");
-                        result.put("msg", "更新数据失败");
-                        result.put("state", "0");
-                        return ResultVO.ok(result);
+                        return R.FAILED("更新失败");
                     }
                 } else {
                     log.error("根据该id未查询到数据");
-                    return ResultVO.status(ResultEnum.VALIDATE_ERROR);
+                    return R.FAILED("根据该id未查询到数据");
                 }
 
             case "5":
@@ -224,23 +226,17 @@ public class OrderController {
                     String state = null;
                     int delete = orderService.updateById(orderId, state);
                     if (delete > 0) {
-                        result.put("msg", "删除" + delete + "条数据成功");
-                        result.put("state", "1");
-                        return ResultVO.ok(result);
+                        return R.SUCCESS("删除成功");
                     } else {
-                        log.info("删除失败");
-                        result.put("msg", "删除" + delete + "条数据失败");
-                        result.put("state", "0");
-                        return ResultVO.ok(result);
+                        return R.FAILED("删除失败");
                     }
                 } else {
-                    log.error("根据该id未查询到数据");
-                    return ResultVO.status(ResultEnum.VALIDATE_ERROR);
+                    return R.FAILED("根据该id未查询到数据");
                 }
             default:
                 //查询
                 List<HzhOrder> orderInfos = orderService.selectList(null);
-                return ResultVO.ok(orderInfos);
+                return R.SUCCESS("查询成功",orderInfos);
         }
     }
 
