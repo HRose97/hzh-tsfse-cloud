@@ -2,17 +2,17 @@ package com.hzh.team.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.CoachInfo;
+import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.respone.R;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.feign.clients.EventClient;
 import com.hzh.team.service.CoachService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -79,6 +79,18 @@ public class CoachController {
         int id = null == map.get("id") ? -1 : Integer.parseInt(map.get("id").toString());
         ResultVO byId = eventClient.findById(map);
         return byId;
+    }
+
+    //教练分页查询
+    @GetMapping("/coach/getAllCoachByPage")
+    public R getAllUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
+        if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
+            Page<CoachInfo> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
+            IPage<CoachInfo> coachInfo = coachService.findAllByPage(page);
+            return R.SUCCESS("查询成功",coachInfo);
+        }else {
+            return R.FAILED("查询失败");
+        }
     }
 
 }

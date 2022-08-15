@@ -11,4 +11,6 @@ import com.hzh.common.pojo.CoachInfo;
 public interface CoachService {
 
    IPage<CoachInfo> selectPage(Page<CoachInfo> page);
+
+    IPage<CoachInfo> findAllByPage(Page<CoachInfo> page);
 }

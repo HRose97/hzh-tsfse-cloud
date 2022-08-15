@@ -19,22 +19,22 @@ spring:
         namespace: 14be9d75-e2d3-4d73-9db1-65ef410240b4
     gateway:
       routes:
-        - id: user-service # 路由标示，必须唯一
+        - id: userService # 路由标示，必须唯一
           uri: lb://userService # 路由的目标地址 服务名称前缀 lb:
           predicates: # 路由断言，判断请求是否符合规则
             - Path=/hzh-user/** # 路径断言，判断路径是否是以/user开头，如果是则符合
-        - id: event-service # 路由标示，必须唯一
+        - id: eventService # 路由标示，必须唯一
           uri: lb://eventService # 路由的目标地址 服务名称前缀 lb:
           predicates: # 路由断言，判断请求是否符合规则
-             - Path=/hzh-
+             - Path=/hzh-event/**
               /** # 路径断言，判断路径是否是以/user开头，如果是则符合
-        - id: team-service # 路由标示，必须唯一
+        - id: teamService # 路由标示，必须唯一
           uri: lb://teamService # 路由的目标地址 服务名称前缀 lb:
           predicates: # 路由断言，判断请求是否符合规则
              - Path=/hzh-team/** # 路径断言，判断路径是否是以/user开头，如果是则符合
              #时间断言  在2037年以后才可以访问
              #- After=2037-01-20T17:42:47.789-07:00[America/Denver]
-        - id: order-service
+        - id: orderService
           uri: lb://orderService
           predicates:
             - Path=/hzh-order/**

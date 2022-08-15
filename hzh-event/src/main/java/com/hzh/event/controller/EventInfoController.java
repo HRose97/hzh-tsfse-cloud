@@ -1,18 +1,18 @@
 package com.hzh.event.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.EventInfo;
+import com.hzh.common.pojo.TeamInfo;
 import com.hzh.common.pojo.vo.ResultVO;
+import com.hzh.common.respone.R;
 import com.hzh.common.utils.RedisKeyUtil;
 import com.hzh.common.utils.RedisUtils;
 import com.hzh.event.service.EventInfoService;
 import lombok.extern.slf4j.Slf4j;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -41,13 +41,16 @@ public class EventInfoController {
     @Resource
     private RedisKeyUtil redisKeyUtil;
 
-    @PostMapping("/eventInfo/getAll")
-    public ResultVO getAll(@RequestBody HashMap map) {
-        int current = null == map.get("current") ? 1 : Integer.parseInt(map.get("current").toString());
-        int size = null == map.get("size") ? 10 : Integer.parseInt(map.get("size").toString());
-        Page<EventInfo> page = new Page<>(current, size);
-        IPage<EventInfo> physicalHeldInfoIPage = eventInfoService.selectPage(page);
-        return ResultVO.ok(physicalHeldInfoIPage);
+
+    @GetMapping("/eventInfo/getAllEvent")
+    public R getAllEvent(@RequestParam("current")String current, @RequestParam("size")String size) {
+        if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
+            Page<EventInfo> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
+            IPage<EventInfo> eventInfoIPage = eventInfoService.selectPage(page);
+            return R.SUCCESS("查询成功",eventInfoIPage);
+        }else {
+            return R.FAILED("查询失败");
+        }
     }
 
     @PostMapping("/eventInfo/crud")
