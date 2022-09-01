@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.mapper.HzhUserMapper;
 import com.hzh.common.mapper.HzhUserTokenMapper;
 import com.hzh.common.pojo.HzhUser;
@@ -24,18 +23,12 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.util.TextUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -768,9 +761,9 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
     }
 
     @Override
-    public boolean uploadExcel(MultipartFile file) throws Exception {
+    public Map uploadExcel(MultipartFile file) throws Exception {
         String name = file.getOriginalFilename();
-
+        Map result = new HashMap();
         if (name.length() < 5 || !name.substring(name.length() - 5).equals(".xlsx")) {
             throw new Exception("文件格式错误");
         }
@@ -809,15 +802,21 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 HzhUser hzhUser1 = hzhUserMapper.selectById(hzhUser.getId());
                 if (hzhUser1 == null) {
                     hzhUserMapper.insert(hzhUser);
+                    result.put("code","1");
+                    result.put("msg","导入成功");
                 } else {
                     System.out.println("error：该条信息已存在 message：" +  hzhUser);
+                    result.put("2","该条信息已存在 message：" +  hzhUser);
+                    result.put("code","2");
                 }
             }
         }catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return true;
+        result.put("msg","导入失败");
+        result.put("code","3");
+        return result;
     }
 
 

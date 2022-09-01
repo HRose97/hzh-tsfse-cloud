@@ -1,7 +1,6 @@
 package com.hzh.user.controller.admin;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.util.CollectionUtils;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -14,18 +13,15 @@ import com.hzh.common.pojo.vo.ResultVO;
 import com.hzh.common.respone.R;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.user.service.HzhUserService;
-import com.hzh.user.utils.ExcelUtils;
-import com.hzh.user.utils.POIUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -164,47 +160,34 @@ public class HzhUserAdminController {
      */
     @PostMapping("/user/import")
     public R importData(@RequestBody MultipartFile file) throws Exception {
-//        System.out.println("file ===> " + file);
-//        // 1.自定义一个工具类拿到要解析的文件并解析成要存储的数据
-//        List<HzhUser> list = POIUtils.excel2Employee(file);
-//        // 2.遍历输出你解析的数据格式是否正确
-//        for (HzhUser employee : list) {
-//            System.out.println(employee.toString());
-//        }
-//        // 3.进行数据库添加操作
-//        if (hzhUserService.insert(list) == 1) {
-//            return R.SUCCESS("上传成功！");
-//        }
-//        return R.FAILED("上传失败！");
-        //===========================================
-//        boolean upload = hzhUserService.uploadExcel(file);
-//        if (upload){
-//            return R.SUCCESS("导入成功");
-//        }else {
-//            return R.FAILED("导入失败");
-//        }
-        boolean b = hzhUserService.uploadExcel(file);
-        if (b){
+        Map map = hzhUserService.uploadExcel(file);
+        if (map.get("code").equals("1")){
             return R.SUCCESS("导入成功");
+        }else if (map.get("code").equals("2")){
+            //已经存在
+            return R.FAILED(map.get("msg").toString());
+        }else {
+            return R.FAILED("导入失败");
         }
-        return R.FAILED("导入失败");
     }
-
 
     //导出文件到本地
     @GetMapping("/user/ouPuttEcexl")
     public R ouPuttEcexl(){
-        String path = "E:\\tsfse\\user\\user.xlsx";
-        List<HzhUser> all = hzhUserService.getAll();
-        ExcelWriter excelWriter = EasyExcel.write(path, HzhUser.class).build();
-        //sheet名称
-        WriteSheet build1 = EasyExcel.writerSheet("test").build();
-        excelWriter.write(all,build1);
-        excelWriter.finish();
-        System.out.println("导出成功 ：" + path);
-        return R.SUCCESS("导出成功");
+        boolean flag = false;
+        try {
+            String path = "E:\\tsfse\\user\\user.xlsx";
+            List<HzhUser> all = hzhUserService.getAll();
+            ExcelWriter excelWriter = EasyExcel.write(path, HzhUser.class).build();
+            //sheet名称
+            WriteSheet build1 = EasyExcel.writerSheet("user").build();
+            excelWriter.write(all,build1);
+            excelWriter.finish();
+            System.out.println("导出成功 ：" + path);
+            return R.SUCCESS("导出成功");
+        }catch (Exception e){
+            log.error("另一个程序正在使用此文件，进程无法访问");
+            return R.FAILED("另一个程序正在使用此文件，进程无法访问");
+        }
     }
-
-
-
 }

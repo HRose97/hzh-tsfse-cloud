@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Hou Zhonghu
@@ -55,7 +56,7 @@ public interface HzhUserService {
 
     int addUserByAdmin(HzhUser hzhUser);
 
-    boolean uploadExcel(MultipartFile file) throws Exception;
+    Map uploadExcel(MultipartFile file) throws Exception;
 
     List<HzhUser> getAll();
 
