@@ -108,10 +108,10 @@
         where id = #{id}
     </update>
 
-    <update id="delUserById">
-        UPDATE hzh_user set update_time = #{updateDate} AND password = #{encode}
-        where id = #{id}
-    </update>
+<!--    <update id="delUserById">-->
+<!--        UPDATE hzh_user set update_time = #{updateDate} AND password = #{encode}-->
+<!--        where id = #{id}-->
+<!--    </update>-->
 
     <select id="selectListByFilter" parameterType="com.hzh.common.pojo.HzhUser" resultType="com.hzh.common.pojo.HzhUser">
         SELECT id,user_name,user_description,

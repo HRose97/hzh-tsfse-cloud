@@ -64,6 +64,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderInfoMapper,HzhOrder> impl
     @Override
     public IPage<HzhOrder> getAllOrderByPage(Page<HzhOrder> page) {
         Page<HzhOrder> hzhOrderPage = orderInfoMapper.selectPage(page, null);
+        //IPage<HzhOrder> hzhOrderPage = orderInfoMapper.selectOrderInfoByPage(page.getCurrent(),page.getSize());
         return hzhOrderPage;
     }
 }

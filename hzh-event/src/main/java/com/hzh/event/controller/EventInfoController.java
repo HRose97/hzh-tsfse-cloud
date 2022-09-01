@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.EventInfo;
-import com.hzh.common.pojo.TeamInfo;
 import com.hzh.common.pojo.vo.ResultVO;
 import com.hzh.common.respone.R;
 import com.hzh.common.utils.RedisKeyUtil;

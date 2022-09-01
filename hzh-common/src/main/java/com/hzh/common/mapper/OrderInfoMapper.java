@@ -1,9 +1,12 @@
 package com.hzh.common.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.HzhOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,6 +20,8 @@ import org.apache.ibatis.annotations.Param;
 public interface OrderInfoMapper extends BaseMapper<HzhOrder> {
 
     int updateById(@Param("id") String id, @Param("state") String state);
+
+    //List<HzhOrder> selectOrderInfoByPage(@Param("current") long current, @Param("size") long size);
 
     //HzhOrder selectByOrderId(@Param("orderId")String orderId);
 }

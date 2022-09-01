@@ -6,7 +6,9 @@ import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
 import com.hzh.common.respone.R;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,10 +47,17 @@ public interface HzhUserService {
 
     R registerUser(String mailCode, HzhUser hzhUser) throws Exception;
 
-
     R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception;
 
     R initAdminAccount(HzhUser hzhUser);
 
     IPage<HzhUser> selectListByFilter(Page<HzhUser> page, HzhUser hzhUser);
+
+    int addUserByAdmin(HzhUser hzhUser);
+
+    boolean uploadExcel(MultipartFile file) throws Exception;
+
+    List<HzhUser> getAll();
+
+    int insert(List<HzhUser> list);
 }

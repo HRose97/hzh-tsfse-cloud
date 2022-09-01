@@ -1,7 +1,7 @@
 package com.hzh.common.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzh.common.pojo.TeamInfo;
+import com.hzh.common.pojo.BasketballTeamInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022/8/15 16:54
  */
 @Mapper
-public interface TeamInfoMapper extends BaseMapper<TeamInfo> {
+public interface BasketballTeamInfoMapper extends BaseMapper<BasketballTeamInfo> {
 }

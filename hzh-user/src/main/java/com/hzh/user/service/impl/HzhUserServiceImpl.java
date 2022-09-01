@@ -1,5 +1,7 @@
 package com.hzh.user.service.impl;
 
+import com.hzh.user.utils.ExcelUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.anji.captcha.model.common.RepCodeEnum;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
@@ -22,11 +24,18 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.util.TextUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -43,7 +52,12 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     private static  final String cookieTokenName = "tsfseToken";
 
+    //yyyyMMddHHmm
     String date = DateUtils.getCurrent(DateUtils.year_of_minute);
+    //yyyyMMdd HH:mm:ss
+    String dateH = DateUtils.getCurrent(DateUtils.dateFullPattern);
+
+
 
     @Resource
     private CaptchaService captchaService;
@@ -745,6 +759,77 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 .or().eq("email",hzhUser.getEmail());
         Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
         return hzhUserPage;
+    }
+
+    @Override
+    public int addUserByAdmin(HzhUser hzhUser) {
+        int insert = hzhUserMapper.insert(hzhUser);
+        return insert;
+    }
+
+    @Override
+    public boolean uploadExcel(MultipartFile file) throws Exception {
+        String name = file.getOriginalFilename();
+
+        if (name.length() < 5 || !name.substring(name.length() - 5).equals(".xlsx")) {
+            throw new Exception("文件格式错误");
+        }
+        // 获取Excel中的数据
+        List<Map<String,Object>> list = ExcelUtils.excelToShopIdList(file.getInputStream());
+
+        //目的是为了去除文档中的id userName等
+        Map<String, Object> remove = list.remove(0);
+        System.out.println("remove ===> " + remove);
+        // 向数据库遍历添加数据库
+        try {
+            for (Map<String,Object>data : list) {
+                HzhUser hzhUser = new HzhUser();
+                //System.out.println( " data ==> " + data);
+                //System.out.println( " list ==> " + list.get(1));
+                //表中数据为int long 等的
+                String id = data.get("col0").toString();
+                hzhUser.setId(Long.parseLong(id));
+                hzhUser.setUserName(data.get("col1") == null ? "" : data.get("col1").toString());
+                hzhUser.setPassword(data.get("col2") == null ? "" : data.get("col2").toString());
+                hzhUser.setUserDescription(data.get("col3") == null ? "" : data.get("col3").toString());
+                hzhUser.setStatus(data.get("col4") == null ? "" : data.get("col4").toString());
+                hzhUser.setEmail(data.get("col5") == null ? "" : data.get("col5").toString());
+                hzhUser.setPhonenumber(data.get("col6") == null ? "" : data.get("col6").toString());
+                hzhUser.setSex(data.get("col7") == null ? "" : data.get("col7").toString());
+                hzhUser.setSalt(data.get("col8") == null ? "" : data.get("col8").toString());
+                hzhUser.setAvatar(data.get("col9") == null ? "" : data.get("col9").toString());
+                hzhUser.setLevel(data.get("col10") == null ? "" : data.get("col10").toString());
+                hzhUser.setUserType(data.get("col11") == null ? "" : data.get("col11").toString());
+                hzhUser.setCreateTime(dateH);
+                hzhUser.setUpdateTime(dateH);
+                hzhUser.setUpdateBy(1l);
+                hzhUser.setDelFlag("0");
+
+                // 先根据eneityid查询数据库里有没有一样的，没有就进行添加
+                HzhUser hzhUser1 = hzhUserMapper.selectById(hzhUser.getId());
+                if (hzhUser1 == null) {
+                    hzhUserMapper.insert(hzhUser);
+                } else {
+                    System.out.println("error：该条信息已存在 message：" +  hzhUser);
+                }
+            }
+        }catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+
+    @Override
+    public List<HzhUser> getAll() {
+        return hzhUserMapper.selectList(null);
+    }
+
+    @Override
+    public int insert(List<HzhUser> list) {
+        return hzhUserMapper.insert((HzhUser) list);
     }
 
 

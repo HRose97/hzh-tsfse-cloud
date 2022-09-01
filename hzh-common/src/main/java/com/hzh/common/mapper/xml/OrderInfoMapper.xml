@@ -6,4 +6,12 @@
         SELECT * FROM hzh_order WHERE order_id = #{orderId}
     </select>
 
+
+    <select id="selectOrderInfoByPage" resultType="com.hzh.common.pojo.HzhOrder">
+        SELECT * FROM hzh_order LIMIT 1,10
+    </select>
+
+
+
+
 </mapper>
