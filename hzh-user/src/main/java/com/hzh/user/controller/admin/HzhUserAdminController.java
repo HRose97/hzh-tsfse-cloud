@@ -14,13 +14,9 @@ import com.hzh.common.respone.R;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.user.service.HzhUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +45,25 @@ public class HzhUserAdminController {
         return hzhUserService.reSetPasswordByAdmin(id,reSetPasswordVo);
     }
 
-    //分页查询
+    //分页查询非系统用户
     @GetMapping("/user/getAllUserByPage")
-    public R getAllUserByPage(@RequestParam("current")String current,@RequestParam("size")String size){
+    public R getMemberUserByPage(@RequestParam("current")String current,@RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<HzhUser> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
-            IPage<HzhUser> hzhUserIPage = hzhUserService.findAllByPage(page);
+            IPage<HzhUser> hzhUserIPage = hzhUserService.getMemberUserByPage(page);
+            return R.SUCCESS("查询成功",hzhUserIPage);
+        }else {
+            return R.FAILED("查询失败");
+        }
+    }
+
+
+    //分页查询非系统用户
+    @GetMapping("/user/adminUserList")
+    public R adminUserList(@RequestParam("current")String current,@RequestParam("size")String size){
+        if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
+            Page<HzhUser> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
+            IPage<HzhUser> hzhUserIPage = hzhUserService.adminUserList(page);
             return R.SUCCESS("查询成功",hzhUserIPage);
         }else {
             return R.FAILED("查询失败");
@@ -89,36 +98,41 @@ public class HzhUserAdminController {
     }
 
     //禁用用户
-    @PutMapping("/user/disableUserById")
-    public ResultVO disableUserById(@RequestParam("id")String id,@RequestParam("status")String status){
+    @GetMapping("/user/disableUserById")
+    public R disableUserById(@RequestParam("id")String id,@RequestParam("status")String status){
         String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
+        if (status.equals("0")){
+            status = "1";
+        }else {
+            status = "0";
+        }
         if ( !StringUtils.isEmpty(id) ){
             HzhUser findByfilter = hzhUserService.findByUserId(Long.parseLong(id));
             if (findByfilter != null && findByfilter.getDelFlag().equals("0")){
                 //0 启用  1禁用  要在未删除的情况下   0未删除  1删除
                 boolean updateState = hzhUserService.updateByState(Long.parseLong(id),status,updateDate);
                 if (updateState){
-                    return ResultVO.ok();
+                    return R.SUCCESS("禁用成功");
                 }else {
-                    return ResultVO.status(ResultEnum.INNER_EXCEPTION);
+                    return R.FAILED("禁用失败");
                 }
             }else {
-                return ResultVO.status(ResultEnum.VALIDATE_ERROR);
+                return R.FAILED("参数校验出错");
             }
         }else {
-            return ResultVO.status(ResultEnum.VALIDATE_ERROR);
+            return R.FAILED("参数校验出错");
         }
     }
 
     //删除用户
-    @PutMapping("/user/delUserById")
-    public ResultVO delUserById(@RequestParam("id")String id,@RequestParam("delFlag")String delFlag){
+    @GetMapping("/user/delUserById")
+    public ResultVO delUserById(@RequestParam("id")String id){
         String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
         if ( !StringUtils.isEmpty(id) ){
             HzhUser findByfilter = hzhUserService.findByUserId(Long.parseLong(id));
             if (findByfilter != null ){
                 // 0未删除  1删除
-                boolean updateState = hzhUserService.delUserById(Long.parseLong(id),delFlag,updateDate);
+                boolean updateState = hzhUserService.delUserById(Long.parseLong(id),"1",updateDate);
                 if (updateState){
                     return ResultVO.ok();
                 }else {

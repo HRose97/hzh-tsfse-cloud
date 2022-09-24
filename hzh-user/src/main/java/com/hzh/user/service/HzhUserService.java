@@ -36,7 +36,7 @@ public interface HzhUserService {
 
     R reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
 
-    IPage<HzhUser> findAllByPage(Page<HzhUser> page);
+    IPage<HzhUser> getMemberUserByPage(Page<HzhUser> page);
 
     HzhUser findByUserId(long id);
 
@@ -61,4 +61,6 @@ public interface HzhUserService {
     List<HzhUser> getAll();
 
     int insert(List<HzhUser> list);
+
+    IPage<HzhUser> adminUserList(Page<HzhUser> page);
 }

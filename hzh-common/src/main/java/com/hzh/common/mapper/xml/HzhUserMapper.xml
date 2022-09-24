@@ -99,12 +99,12 @@
     </update>
 
     <update id="updateStateById">
-        UPDATE hzh_user set status = #{status} AND update_time = #{updateDate}
+        UPDATE hzh_user set status = #{status} , update_time = #{updateDate}
         where id = #{id}
     </update>
 
     <update id="delUserById">
-        UPDATE hzh_user set del_flag = #{delFlag} AND update_time = #{updateDate}
+        UPDATE hzh_user set del_flag = #{delFlag} , update_time = #{updateDate}
         where id = #{id}
     </update>
 

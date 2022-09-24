@@ -571,9 +571,10 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     //分页查询用户
     @Override
-    public IPage<HzhUser> findAllByPage(Page<HzhUser> page) {
+    public IPage<HzhUser> getMemberUserByPage(Page<HzhUser> page) {
         QueryWrapper<HzhUser> queryWrapper = new QueryWrapper();
         queryWrapper.eq("del_flag",0);
+        queryWrapper.eq("user_type","member");
         Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
         return hzhUserPage;
     }
@@ -829,6 +830,15 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
     @Override
     public int insert(List<HzhUser> list) {
         return hzhUserMapper.insert((HzhUser) list);
+    }
+
+    @Override
+    public IPage<HzhUser> adminUserList(Page<HzhUser> page) {
+        QueryWrapper<HzhUser> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("del_flag",0);
+        queryWrapper.ne("user_type","member");
+        Page<HzhUser> hzhUserPage = hzhUserMapper.selectPage(page, queryWrapper);
+        return hzhUserPage;
     }
 
 

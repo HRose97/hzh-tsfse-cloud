@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzh.test.mysql.mapper.TabelMapper">
+
+    <resultMap id="moseSystemHostMap" type="com.hzh.test.mysql.pojo.MoseSystemHost">
+        <result property="strSystemCode" column="system_code"></result>
+        <result property="strHostCode" column="host_code"></result>
+        <result property="strHostName" column="host_name"></result>
+        <result property="strHostComment" column="host_comment"></result>
+        <result property="strHostIP" column="host_ip"></result>
+        <result property="strHostArea" column="host_area"></result>
+        <result property="strHostState" column="host_state"></result>
+        <result property="strHostType" column="host_type"></result>
+        <result property="port" column="port"></result>
+    </resultMap>
+
+    <insert id="insMoseSystemHost">
+        INSERT INTO   mose_system_host(system_code,     host_code,     host_name,
+                                       host_comment,     host_ip,     host_area,     host_state,    host_type,port)
+        VALUES (#{strSystemCode},#{strHostCode}, #{strHostName}, #{strHostComment},#{strHostIP}, #{strHostArea}, #{strHostState}, #{strHostType}, #{port})
+    </insert>
+
+    <update id="creatTable" parameterType="java.lang.String">>
+        CREATE TABLER  htest_htest_notice_data  (
+                                       `notice_sequence` bigint NOT NULL COMMENT '时间戳序号',
+                                       `notice_date` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发生日期(8位长)',
+                                       `notice_time` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发生时间(6位长）',
+                                       `item` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '监控项标识',
+                                       `subitem` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '监控子项标识',
+                                       `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '告警级别1-正常、2-风险、3-危害、4-灾难',
+                                       `notice_data` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '告警信息',
+                                       `notice_state` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '告警状态',
+                                       `handler` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '处理人',
+                                       `handle_datetime` varchar(14) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '处理日期时间',
+                                       `handle_describe` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '处理说明',
+                                       `falert_nowtime_value` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '告警当前值',
+                                       UNIQUE INDEX `ITEM`(`item` ASC) USING BTREE,
+                                       UNIQUE INDEX `SUBITEM`(`subitem` ASC) USING BTREE,
+                                       UNIQUE INDEX `NOTIC_SEQUENCE`(`notice_sequence` ASC) USING BTREE
+        ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+    </update>
+
+
+
+    <delete id="delTable">
+        DROP TABLE IF EXISTS  ${tableName}
+    </delete>
+
+    <select id="selHostInfoByHostCode" resultMap="moseSystemHostMap">
+        SELECT
+            *
+        FROM mose_system_host
+        where host_code = #{strHostCode}
+    </select>
+    <select id="findHostAndType" resultType="java.util.Map">
+        SELECT host_code,host_type,system_code FROM mose_system_host
+    </select>
+    <select id="findHostBySystem" resultType="java.util.Map">
+        SELECT host_code,host_name,host_type FROM mose_system_host WHERE system_code=#{strSystemCode}
+    </select>
+
+    <select id="getSystemHost" resultMap="moseSystemHostMap">
+        SELECT
+            *
+        FROM mose_system_host
+        WHERE system_code = #{strSystemCode} and host_code = #{strHostCode}
+    </select>
+
+    <delete id="delHostInfoByHostCode">
+        DELETE FROM   mose_system_host
+        WHERE     host_code = #{strHostCode}
+          AND system_code = #{strSystemCode}
+    </delete>
+
+</mapper>

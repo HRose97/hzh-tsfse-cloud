@@ -157,9 +157,6 @@ public class ProducerService {
         headers.put("type","user");
         headers.put("a",7);
         rocketMQTemplate.convertAndSend("hzh-demo6-filterSQL",message2,headers3);
-
-
-
     }
 
 
