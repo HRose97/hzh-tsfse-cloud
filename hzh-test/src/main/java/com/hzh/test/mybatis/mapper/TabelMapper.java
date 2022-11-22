@@ -1,9 +1,8 @@
-package com.hzh.test.mysql.mapper;
+package com.hzh.test.mybatis.mapper;
 
-import com.hzh.test.mysql.pojo.MoseSystemHost;
+import com.hzh.test.mybatis.pojo.MoseSystemHost;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Hou Zhonghu

@@ -81,10 +81,10 @@
                 <scope>compile</scope>
             </dependency>
 
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>redis.clients</groupId>-->
+<!--                <artifactId>jedis</artifactId>-->
+<!--            </dependency>-->
 
             <!--添加rocketmq依赖-->
             <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-spring-boot-starter -->

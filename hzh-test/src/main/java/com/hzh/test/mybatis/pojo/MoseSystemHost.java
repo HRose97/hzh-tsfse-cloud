@@ -1,4 +1,4 @@
-package com.hzh.test.mysql.pojo;
+package com.hzh.test.mybatis.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

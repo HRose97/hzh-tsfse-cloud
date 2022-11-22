@@ -1,4 +1,4 @@
-package com.hzh.test.mysql;
+package com.hzh.test.mybatis;
 
 import javax.xml.bind.annotation.XmlElement;
 import java.io.*;

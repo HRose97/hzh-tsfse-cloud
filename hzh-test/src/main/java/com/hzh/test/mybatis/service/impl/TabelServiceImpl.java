@@ -1,24 +1,16 @@
-package com.hzh.test.mysql.service.impl;
+package com.hzh.test.mybatis.service.impl;
 
-import com.hzh.test.mysql.mapper.TabelMapper;
-import com.hzh.test.mysql.pojo.AnalyPara;
-import com.hzh.test.mysql.pojo.MoseSystemHost;
-import com.hzh.test.mysql.pojo.vo.Messager;
-import com.hzh.test.mysql.service.TabelService;
+import com.hzh.test.mybatis.mapper.TabelMapper;
+import com.hzh.test.mybatis.pojo.MoseSystemHost;
+import com.hzh.test.mybatis.pojo.vo.Messager;
+import com.hzh.test.mybatis.service.TabelService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 
 /**
  * @author Hou Zhonghu

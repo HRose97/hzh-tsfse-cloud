@@ -1,4 +1,4 @@
-package com.hzh.test.mysql;
+package com.hzh.test.mybatis;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

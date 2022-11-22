@@ -1,11 +1,8 @@
-package com.hzh.test.mysql.controller;
+package com.hzh.test.mybatis.controller;
 
-import com.hzh.test.mysql.pojo.AnalyPara;
-import com.hzh.test.mysql.pojo.MoseSystemHost;
-import com.hzh.test.mysql.pojo.vo.Messager;
-import com.hzh.test.mysql.service.TabelService;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
+import com.hzh.test.mybatis.pojo.MoseSystemHost;
+import com.hzh.test.mybatis.pojo.vo.Messager;
+import com.hzh.test.mybatis.service.TabelService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

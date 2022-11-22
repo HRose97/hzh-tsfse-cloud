@@ -1,6 +1,6 @@
-package com.hzh.test.mysql.except;
+package com.hzh.test.mybatis.except;
 
-import com.hzh.test.mysql.pojo.vo.Messager;
+import com.hzh.test.mybatis.pojo.vo.Messager;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
