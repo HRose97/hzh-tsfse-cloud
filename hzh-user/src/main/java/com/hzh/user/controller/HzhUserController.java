@@ -1,16 +1,10 @@
 package com.hzh.user.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
-import com.hzh.common.pojo.vo.ResultVO;
 import com.hzh.common.respone.R;
-import com.hzh.common.utils.*;
 import com.hzh.user.service.HzhUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +24,7 @@ import javax.annotation.Resource;
 public class HzhUserController {
 
     @Resource
-    private HzhUserService hzhUserService;
+    public HzhUserService hzhUserService;
 
     @GetMapping("/test")
     public String test(){
