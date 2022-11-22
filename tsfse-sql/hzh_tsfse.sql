@@ -11,23 +11,49 @@
  Target Server Version : 80027
  File Encoding         : 65001
 
- Date: 16/07/2022 16:23:03
+ Date: 22/11/2022 22:18:52
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
+-- Table structure for basketball_team_info
+-- ----------------------------
+DROP TABLE IF EXISTS `basketball_team_info`;
+CREATE TABLE `basketball_team_info`  (
+                                         `team_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                         `team_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队名',
+                                         `team_type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队类型',
+                                         `team_country` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队所属国家',
+                                         `team_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队成立日期',
+                                         `team_logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队logo',
+                                         `team_local` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队所在地',
+                                         `team_home` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队主场',
+                                         `team_overall_champion` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队总冠军次数',
+                                         `team_partition_champion` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队分区总冠军次数',
+                                         `team_playoffs` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队季后赛次数',
+                                         `team_administrator` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队管理员',
+                                         `team_coach` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队主教练',
+                                         PRIMARY KEY (`team_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '球队信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of basketball_team_info
+-- ----------------------------
+INSERT INTO `basketball_team_info` VALUES (1, '76人', '篮球', '美国', '2022-07-21', '1', '美国费城', '瓦乔维亚中心球场', '3', '9', '23', 'HH', '1');
+
+-- ----------------------------
 -- Table structure for china_city
 -- ----------------------------
 DROP TABLE IF EXISTS `china_city`;
 CREATE TABLE `china_city`  (
-  `id` smallint NOT NULL DEFAULT 0,
-  `pid` int NULL DEFAULT NULL,
-  `cityname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `type` int NULL DEFAULT NULL,
-  `state` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '逻辑删除',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` smallint NOT NULL DEFAULT 0,
+                               `pid` int NULL DEFAULT NULL,
+                               `cityname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `type` int NULL DEFAULT NULL,
+                               `state` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '逻辑删除',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3448,21 +3474,21 @@ INSERT INTO `china_city` VALUES (3409, 1, '修改', -1, '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `coach_info`;
 CREATE TABLE `coach_info`  (
-  `coach_team_id` int NOT NULL AUTO_INCREMENT COMMENT '教练团队编号',
-  `coach_id` int NOT NULL COMMENT '教练编号',
-  `coach_name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教练名称',
-  `coach_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '入队时间',
-  `coach_height` int NOT NULL COMMENT '教练身高',
-  `coach_won_num` int NOT NULL COMMENT '执教胜场',
-  `coach_total` int NOT NULL COMMENT '执教总场次',
-  `coach_weight` int NOT NULL COMMENT '教练体重',
-  `coach_country` int NOT NULL COMMENT '教练国籍',
-  `coach_age` int NOT NULL COMMENT '教练年龄',
-  `coach_uniform_number` int NOT NULL COMMENT '队服号码',
-  `coach_location` int NOT NULL COMMENT '教练位置  1-主教练  2-助理教练  3-其他教练',
-  `coach_practitioners_age` int NOT NULL COMMENT '从业时长',
-  `coach_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练类型-篮球-足球等',
-  PRIMARY KEY (`coach_team_id`) USING BTREE
+                               `coach_team_id` int NOT NULL AUTO_INCREMENT COMMENT '教练团队编号',
+                               `coach_id` int NOT NULL COMMENT '教练编号',
+                               `coach_name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教练名称',
+                               `coach_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '入队时间',
+                               `coach_height` int NOT NULL COMMENT '教练身高',
+                               `coach_won_num` int NOT NULL COMMENT '执教胜场',
+                               `coach_total` int NOT NULL COMMENT '执教总场次',
+                               `coach_weight` int NOT NULL COMMENT '教练体重',
+                               `coach_country` int NOT NULL COMMENT '教练国籍',
+                               `coach_age` int NOT NULL COMMENT '教练年龄',
+                               `coach_uniform_number` int NOT NULL COMMENT '队服号码',
+                               `coach_location` int NOT NULL COMMENT '教练位置  1-主教练  2-助理教练  3-其他教练',
+                               `coach_practitioners_age` int NOT NULL COMMENT '从业时长',
+                               `coach_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练类型-篮球-足球等',
+                               PRIMARY KEY (`coach_team_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3475,20 +3501,20 @@ INSERT INTO `coach_info` VALUES (1, 1, 'Hzh教练', '2022-03-21', 191, 12, 13, 1
 -- ----------------------------
 DROP TABLE IF EXISTS `event_info`;
 CREATE TABLE `event_info`  (
-  `physical_id` smallint UNSIGNED NOT NULL COMMENT '体育类型ID',
-  `physical_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '体育类型名称',
-  `held_country` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办国',
-  `held_location` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办地',
-  `held_home` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办主场方',
-  `maximum_capacity` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '场地最大容纳人数',
-  `away_ground` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客场方',
-  `physical_held_logo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '举办主场方logo URL',
-  `physical_desc` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '体育描述',
-  `physical_status` tinyint NOT NULL DEFAULT 0 COMMENT '体育状态,0禁用,1启用',
-  `match_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开赛时间',
-  `held_venues` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办场馆',
-  PRIMARY KEY (`physical_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '体育赛事举办信息表' ROW_FORMAT = DYNAMIC;
+                               `physical_id` smallint UNSIGNED NOT NULL COMMENT '体育类型ID',
+                               `physical_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '体育类型名称',
+                               `held_country` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办国',
+                               `held_location` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办地',
+                               `held_home` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办主场方',
+                               `maximum_capacity` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '场地最大容纳人数',
+                               `away_ground` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客场方',
+                               `physical_held_logo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '举办主场方logo URL',
+                               `physical_desc` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '体育描述',
+                               `physical_status` tinyint NOT NULL DEFAULT 0 COMMENT '体育状态,0禁用,1启用',
+                               `match_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开赛时间',
+                               `held_venues` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举办场馆',
+                               PRIMARY KEY (`physical_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '体育赛事举办信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of event_info
@@ -3502,23 +3528,52 @@ INSERT INTO `event_info` VALUES (6, '羽毛球', '中国', '北京', '东单', '
 INSERT INTO `event_info` VALUES (7, '羽毛球', '中国', '北京', '东单', '1000', 'OJBK队', '添加redis测试', '添加redis测试', 0, '2022-07-21 15:50', '东单户外羽毛球场地');
 INSERT INTO `event_info` VALUES (8, '羽毛球', '中国', '北京', '东单', '1000', 'OJBK队', '添加redis测试', '添加redis测试', 0, '2022-07-21 15:50', '东单户外羽毛球场地');
 INSERT INTO `event_info` VALUES (9, '羽毛球', '中国', '北京', '东单', '1000', 'OJBK队', '添加redis测试', '添加redis测试', 0, '2022-07-21 15:50', '东单户外羽毛球场地');
+INSERT INTO `event_info` VALUES (10, '羽毛球', '中国', '北京', '东单', '1000', 'OJBK队', '添加redis测试', '添加redis测试', 0, '2022-07-21 15:50', '东单户外羽毛球场地');
+
+-- ----------------------------
+-- Table structure for football_team_info
+-- ----------------------------
+DROP TABLE IF EXISTS `football_team_info`;
+CREATE TABLE `football_team_info`  (
+                                       `team_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                       `team_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队名',
+                                       `team_type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队类型',
+                                       `team_country` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球队所属国家',
+                                       `team_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队成立日期',
+                                       `team_logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队logo',
+                                       `team_local` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队所在地',
+                                       `team_home` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队主场',
+                                       `team_league` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队所属联赛',
+                                       `team_overall_champion` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联赛冠军次数',
+                                       `team_partition_champion` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '欧洲冠军联赛冠军',
+                                       `team_playoffs` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '英格兰足总杯冠军',
+                                       `team_administrator` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队管理员',
+                                       `team_coach` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球队主教练',
+                                       PRIMARY KEY (`team_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '球队信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of football_team_info
+-- ----------------------------
+INSERT INTO `football_team_info` VALUES (1, '曼彻斯特联足球俱乐部', '足球', '英国', '1878-07-21', '1.jpg', '西北区大曼彻斯特郡曼彻斯特市', '瓦乔维亚中心球场', '英格兰足球俱乐部', '20', '9', '23', 'HH', '1');
+INSERT INTO `football_team_info` VALUES (2, '曼城', '足球', '英国', '1878-07-21', '11.jpg', '西北区大曼彻斯特郡曼彻斯特市', '瓦乔维亚中心球场', '英格兰足球俱乐部', '20', '3', '12', 'HH', '1');
 
 -- ----------------------------
 -- Table structure for global_location
 -- ----------------------------
 DROP TABLE IF EXISTS `global_location`;
 CREATE TABLE `global_location`  (
-  `GL_ID` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `GLP_ID` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
-  `LEVEL` int UNSIGNED NULL DEFAULT 0 COMMENT '层级',
-  `PATH` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '路径',
-  `CODE` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '代码',
-  `ABBREVIATION` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '国家缩写',
-  `CHINESE_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '中文名称',
-  `ENGLISH_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '英文名称',
-  `INITIALS` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '首字母',
-  `PINYIN` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '中文拼音',
-  PRIMARY KEY (`GL_ID`) USING BTREE
+                                    `GL_ID` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                    `GLP_ID` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
+                                    `LEVEL` int UNSIGNED NULL DEFAULT 0 COMMENT '层级',
+                                    `PATH` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '路径',
+                                    `CODE` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '代码',
+                                    `ABBREVIATION` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '国家缩写',
+                                    `CHINESE_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '中文名称',
+                                    `ENGLISH_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '英文名称',
+                                    `INITIALS` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '首字母',
+                                    `PINYIN` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '中文拼音',
+                                    PRIMARY KEY (`GL_ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4170 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -7699,31 +7754,31 @@ INSERT INTO `global_location` VALUES (4169, 374, 4, ',2,237,374,4169,', NULL, 'Y
 -- ----------------------------
 DROP TABLE IF EXISTS `hzh_order`;
 CREATE TABLE `hzh_order`  (
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单id',
-  `user_id` bigint NOT NULL COMMENT '购票人id',
-  `coupon_id` bigint NULL DEFAULT NULL COMMENT '使用的优惠券',
-  `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'create_time',
-  `member_username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
-  `total_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '订单总额',
-  `pay_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '应付总额',
-  `promotion_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '促销优化金额（促销价、满减、阶梯价）',
-  `integration_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '积分抵扣金额',
-  `coupon_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '优惠券抵扣金额',
-  `discount_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '后台调整订单使用的折扣金额',
-  `pay_type` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付方式【1->支付宝；2->微信；3->银联】',
-  `status` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单状态【0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单】',
-  `integration` int NULL DEFAULT NULL COMMENT '可以获得的积分',
-  `bill_type` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票类型[0->不开发票；1->电子发票；2->纸质发票]',
-  `bill_header` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票抬头',
-  `bill_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票内容',
-  `bill_receiver_phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收票人电话',
-  `bill_receiver_email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收票人邮箱',
-  `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单备注',
-  `use_integration` int NULL DEFAULT NULL COMMENT '下单时使用的积分',
-  `payment_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付时间',
-  `order_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单类型',
-  `order_state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '逻辑删除',
-  PRIMARY KEY (`order_id`) USING BTREE
+                              `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单id',
+                              `user_id` bigint NOT NULL COMMENT '购票人id',
+                              `coupon_id` bigint NULL DEFAULT NULL COMMENT '使用的优惠券',
+                              `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'create_time',
+                              `member_username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
+                              `total_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '订单总额',
+                              `pay_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '应付总额',
+                              `promotion_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '促销优化金额（促销价、满减、阶梯价）',
+                              `integration_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '积分抵扣金额',
+                              `coupon_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '优惠券抵扣金额',
+                              `discount_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '后台调整订单使用的折扣金额',
+                              `pay_type` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付方式【1->支付宝；2->微信；3->银联】',
+                              `status` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单状态【0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单】',
+                              `integration` int NULL DEFAULT NULL COMMENT '可以获得的积分',
+                              `bill_type` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票类型[0->不开发票；1->电子发票；2->纸质发票]',
+                              `bill_header` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票抬头',
+                              `bill_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发票内容',
+                              `bill_receiver_phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收票人电话',
+                              `bill_receiver_email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收票人邮箱',
+                              `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单备注',
+                              `use_integration` int NULL DEFAULT NULL COMMENT '下单时使用的积分',
+                              `payment_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付时间',
+                              `order_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单类型',
+                              `order_state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '逻辑删除',
+                              PRIMARY KEY (`order_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -7733,7 +7788,7 @@ INSERT INTO `hzh_order` VALUES ('1', 2, NULL, '2022-07-12 15:28:02', 'HHH', 156.
 INSERT INTO `hzh_order` VALUES ('LQ-6-2022071500102968', 6, 0, '2022071500102968', 'teamsman', 79.0000, 79.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加9', 0, '2022071500102968', '篮球', '1');
 INSERT INTO `hzh_order` VALUES ('PQ-2-20220714190900922', 2, 0, '20220714190900922', 'admin', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加5', 0, '20220714190900922', '排球', '1');
 INSERT INTO `hzh_order` VALUES ('PQ-2-20220714224018295', 2, 0, '20220714224018295', 'admin', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加6', 0, '20220714224018295', '排球', '1');
-INSERT INTO `hzh_order` VALUES ('PQ-2-20220714225255482', 2, 0, '20220714225255482', 'admin', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加7', 0, '20220714225255482', '排球', '1');
+INSERT INTO `hzh_order` VALUES ('PQ-2-20220714225255482', 2, 0, '20220714225255482', 'admin', 178.0000, 168.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加7', 0, '20220714225255482', '排球', '1');
 INSERT INTO `hzh_order` VALUES ('PQ-2-20220714231056992', 2, 0, '20220714231056992', 'admin', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加7', 0, '20220714231056992', '排球', '1');
 INSERT INTO `hzh_order` VALUES ('PQ-2-20220714232951206', 2, 0, '20220714232951206', 'admin', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加8', 0, '20220714232951206', '排球', '1');
 INSERT INTO `hzh_order` VALUES ('PQ-4-20220714233759258', 4, 0, '20220714233759258', 'eventman', 178.0000, 178.0000, 0.0000, 0.0000, 0.0000, 0.0000, '1', '2', 50, '0', '', '', '', '', '测试redis添加9', 0, '20220714233759258', '排球', '1');
@@ -7758,12 +7813,12 @@ INSERT INTO `hzh_order` VALUES ('ZQ-6-2022071612404373', 6, 0, '2022071612404373
 -- ----------------------------
 DROP TABLE IF EXISTS `hzh_role`;
 CREATE TABLE `hzh_role`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色权限字符串',
-  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '角色状态（0停用 1正常）',
-  `del_flag` int NULL DEFAULT 0 COMMENT 'del_flag',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint NOT NULL AUTO_INCREMENT,
+                             `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色权限字符串',
+                             `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '角色状态（0停用 1正常）',
+                             `del_flag` int NULL DEFAULT 0 COMMENT 'del_flag',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -7784,54 +7839,134 @@ INSERT INTO `hzh_role` VALUES (9, '贵宾', 'vip', '1', 0);
 -- ----------------------------
 DROP TABLE IF EXISTS `hzh_user`;
 CREATE TABLE `hzh_user`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '用户名',
-  `nick_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '昵称',
-  `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '密码',
-  `user_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户描述',
-  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
-  `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `phonenumber` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
-  `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户性别（0男，1女，2未知）',
-  `avatar` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
-  `user_type` char(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '1' COMMENT '用户类型（eventman 体育类型管理用户，sportstypeman 体育类型管理用户，teamsman 球队管理用户，admin  用户管理， visitor 访客 ， member 会员）',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人的用户id',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `del_flag` int NULL DEFAULT 0 COMMENT '删除标志（0代表未删除，1代表已删除）',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
+                             `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                             `user_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '用户名',
+                             `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '密码',
+                             `user_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户描述',
+                             `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
+                             `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
+                             `phonenumber` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
+                             `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户性别（0男，1女，2未知）',
+                             `avatar` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
+                             `user_type` char(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '1' COMMENT '用户类型（eventman 体育类型管理用户，sportstypeman 体育类型管理用户，teamsman 球队管理用户，admin  用户管理， visitor 访客 ， member 会员）',
+                             `level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '会员等级',
+                             `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '盐值',
+                             `create_time` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建时间',
+                             `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+                             `update_time` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '更新时间',
+                             `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 217 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hzh_user
 -- ----------------------------
-INSERT INTO `hzh_user` VALUES (2, 'HHH', 'HHH', '$2a$10$.S370V2Wt/z60Mcu2ZHvX.Vr5r8zr1Fe3x835YJ31rOyRaI6sBnmi', '平台管理员', '1', '2@qq.com', '1324564879/', '2', NULL, 'check', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (3, 'admin', 'admin', '$2a$10$T1u0Dn159piDD6icRiB57eYmLegcQFkHC2bMp4x2gyi0bDMRc2tnu', '系统管理员', '1', NULL, NULL, '1', NULL, 'sys', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (4, 'eventman', 'eventman', '$2a$10$4LNxKGjRt9HVYQl4FvjFUuvM69nCRqn2WugYGpx6srSGlyTdhMRw.', '赛事管理员', '1', NULL, NULL, '1', NULL, 'events', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (5, 'sportstypeman', 'sportstypeman', '$2a$10$VAJWXcjWFXx9OeTj.qbl5exQu2c4Y.c.c1Gmnzwbb7onvZOy9Q8yi', '场馆管理员', '1', NULL, NULL, '1', NULL, 'sportstypeman', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (6, 'teamsman', 'teamsman', '$2a$10$g/oiOUM03g.SBIbjB7yt0ODw4BwT2UXq94xd97OSJym6.75FLIPqC', '球队管理员', '1', NULL, NULL, '1', NULL, 'teams', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (7, 'visitor', 'visitor', '$2a$10$fB3fQXqzrSFbEzMfLeWxIevBdpznCgE0JJMbNY5FLgnbxoSzDAjEK', '游客/访客', '1', NULL, NULL, '1', NULL, 'visitor', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (8, 'member', 'member', '$2a$10$nBZH1BURb8Idq4ktRei.5uyW0Cc..oGLO4MbQSboN32x8u56CJN5W', '会员', '1', NULL, NULL, '1', NULL, 'member', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `hzh_user` VALUES (9, 'vip', 'vip', '$2a$10$nBZH1BURb8Idq4ktRei.5uyW0Cc..oGLO4MbQSboN32x8u56CJN5W', '贵宾', '1', NULL, NULL, '1', NULL, 'vip', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `hzh_user` VALUES (2, 'HHH', '$2a$10$ExHoRZPt6qgOkiqvpzraDesDP6QXoel1BWXdX0DRP6SPZorGdg3Te', '平台管理员', '0', '2@qq.com', '13445678910', '2', NULL, 'check', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:24:46', '0');
+INSERT INTO `hzh_user` VALUES (3, 'admin', '$2a$10$w5TEc20yj9RvTpFbgbF.AOL0VAvP4dmyYTTUZVy3DlqR9fqUtZwHe', '系统管理员', '0', '3@qq.com', '13445678911', '1', NULL, 'sys', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:25:41', '0');
+INSERT INTO `hzh_user` VALUES (4, 'eventman', '1234', '赛事管理员', '0', '4@qq.com', '13445678912', '1', NULL, 'events', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:25:45', '0');
+INSERT INTO `hzh_user` VALUES (5, 'sportstypeman', '1234', '场馆管理员', '0', '5@qq.com', '13445678913', '1', NULL, 'sportstypeman', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:26:53', '0');
+INSERT INTO `hzh_user` VALUES (6, 'teamsman', '1234', '球队管理员', '1', '6@qq.com', '13445678914', '1', NULL, 'teams', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:43:55', '0');
+INSERT INTO `hzh_user` VALUES (7, 'visitor', '1234', '游客/访客', '0', '7@qq.com', '13445678915', '1', NULL, 'visitor', NULL, NULL, '20220805 16:27:01', NULL, '20220901 18:21:45', '0');
+INSERT INTO `hzh_user` VALUES (8, 'member', '1234', '会员', '0', '8@qq.com', '13445678916', '1', NULL, 'member', '0', NULL, '20220805 16:27:01', NULL, '20220901 18:22:06', '0');
+INSERT INTO `hzh_user` VALUES (9, 'vip', '1234', '贵宾', '0', '9@qq.com', '13445678917', '1', NULL, 'member', '4', NULL, '20220805 16:27:01', NULL, '20220901 18:22:26', '0');
+INSERT INTO `hzh_user` VALUES (11, 'H', '1111', '游客/访客', '0', 'H@qq.com', '13445678901', '1', NULL, 'member', '2', NULL, '20220805 16:27:01', NULL, '20220812 11:08:35', '0');
+INSERT INTO `hzh_user` VALUES (26, 'H1', '$2a$10$a4q6rjHoVa7dxmMM/J6kXu9ZjrzCAHpvXQaX9cyE.AA5QVys3Qpb.', '会员', '0', 'H1@qq.com', '13445678902', '2', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948865', '20220805 16:27:01', NULL, '20220901 18:14:06', '0');
+INSERT INTO `hzh_user` VALUES (27, 'H2', '$2a$10$m9FuLMyP9shqglY1dEGhLOXCkln050DPVfjRm1MalXSwRPRI3aRie', '会员', '0', 'H2@qq.com', '13445678903', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1556540456971124738', '20220808 15:18:58', NULL, '20220901 18:13:17', '0');
+INSERT INTO `hzh_user` VALUES (28, 'H3', '$2a$10$hqyPxDEsf.HvGGn78MF5weKTbAgTOfoaP0okCVoKLzLM4q5qDGXvy', '会员', '0', 'H3@qq.com', '13445678904', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '2', '1557633097016115201', '20220811 15:40:44', NULL, '20220811 15:40:44', '0');
+INSERT INTO `hzh_user` VALUES (29, 'H4', '$2a$10$W3mvhaZggxt/Lewmmh4z5OkjJNmLCiuUmv8Y2LUnfZiz2Zxnk3m0a', '会员', '0', 'H4@qq.com', '13445678905', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1557648186783940609', '20220811 16:40:42', NULL, '20220811 16:40:42', '0');
+INSERT INTO `hzh_user` VALUES (30, 'H5', '$2a$10$e.9gtPzJQ0wbsDxWygbIzeGtFMScch2A54Jg2yNToJdvt7Idm5/be', '会员', '0', 'H5@qq.com', '13445678906', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1557659327396433922', '20220811 17:24:57', NULL, '20220811 17:24:57', '0');
+INSERT INTO `hzh_user` VALUES (31, 'H6', '$2a$10$rtePgKBd5jYVl6yBhAV0R.r9wI2Yx2KJ7CyOXTH9FmucurdmVLfLW', '会员', '0', 'H6@qq.com', '13445678907', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1557926998323056641', '20220805 16:27:01', NULL, '20220812 11:08:35', '0');
+INSERT INTO `hzh_user` VALUES (100, 'H100', '$2a$10$ExHoRZPt6qgOkiqvpzraDesDP6QXoel1BWXdX0DRP6SPZorGdg3Te', '平台管理员', '0', 'H100@qq.com', '2147483647', '2', '', 'check', '', '1555470416934948865', '20220901 11:39:38', 1, '20220901 18:20:27', '0');
+INSERT INTO `hzh_user` VALUES (101, 'H101', '$2a$10$w5TEc20yj9RvTpFbgbF.AOL0VAvP4dmyYTTUZVy3DlqR9fqUtZwHe', '系统管理员', '0', 'H101@qq.com', '2147483647', '1', '', 'sys', '', '1555470416934948866', '20220901 11:39:38', 1, '20220901 18:20:43', '0');
+INSERT INTO `hzh_user` VALUES (102, 'H102', '1234', '赛事管理员', '0', 'H102@qq.com', '2147483647', '1', '', 'events', '', '1555470416934948865', '20220901 11:39:38', 1, '20220901 18:21:01', '0');
+INSERT INTO `hzh_user` VALUES (103, 'H103', '1234', '场馆管理员', '0', 'H103@qq.com', '2147483647', '1', '', 'sportstypeman', '', '1555470416934948865', '20220901 11:39:38', 1, '20220901 18:21:34', '0');
+INSERT INTO `hzh_user` VALUES (104, 'H104', '1234', '球队管理员', '0', 'H104@qq.com', '2147483647', '1', '', 'teams', '', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (105, 'H105', '1234', '游客/访客', '0', 'H105@qq.com', '2147483647', '1', '', 'visitor', '', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (106, 'H106', '1234', '会员', '0', 'H106@qq.com', '2147483647', '1', '', 'member', '0', '1555470416934948865', '20220901 11:39:38', 1, '20220924 21:51:58', '1');
+INSERT INTO `hzh_user` VALUES (107, 'H107', '1234', '贵宾', '0', 'H107@qq.com', '2147483647', '1', '', 'member', '4', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (108, 'H108', '1111', '游客/访客', '0', 'H108@qq.com', '2147483647', '1', '', 'member', '2', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (109, 'H109', '$2a$10$a4q6rjHoVa7dxmMM/J6kXu9ZjrzCAHpvXQaX9cyE.AA5QVys3Qpb.', '会员', '0', 'H109@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (110, 'H110', '$2a$10$m9FuLMyP9shqglY1dEGhLOXCkln050DPVfjRm1MalXSwRPRI3aRie', '会员', '0', 'H110@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (111, 'H111', '$2a$10$hqyPxDEsf.HvGGn78MF5weKTbAgTOfoaP0okCVoKLzLM4q5qDGXvy', '会员', '0', 'H111@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '2', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (112, 'H112', '$2a$10$W3mvhaZggxt/Lewmmh4z5OkjJNmLCiuUmv8Y2LUnfZiz2Zxnk3m0a', '会员', '0', 'H112@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (113, 'H113', '$2a$10$e.9gtPzJQ0wbsDxWygbIzeGtFMScch2A54Jg2yNToJdvt7Idm5/be', '会员', '0', 'H113@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (114, 'H114', '$2a$10$rtePgKBd5jYVl6yBhAV0R.r9wI2Yx2KJ7CyOXTH9FmucurdmVLfLW', '会员', '0', 'H114@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1555470416934948865', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (200, 'H200', '$2a$10$ExHoRZPt6qgOkiqvpzraDesDP6QXoel1BWXdX0DRP6SPZorGdg3Te', '平台管理员', '0', 'H200@qq.com', '2147483647', '2', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'check', '2', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (201, 'H201', '$2a$10$w5TEc20yj9RvTpFbgbF.AOL0VAvP4dmyYTTUZVy3DlqR9fqUtZwHe', '系统管理员', '0', 'H201@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'sys', '3', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (202, 'H202', '1234', '赛事管理员', '0', 'H202@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'events', '4', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (203, 'H203', '1234', '场馆管理员', '0', 'H203@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'sportstypeman', '5', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (204, 'H204', '1234', '球队管理员', '0', 'H204@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'teams', '6', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (205, 'H205', '1234', '游客/访客', '0', 'H205@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'visitor', '7', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (206, 'H206', '1234', '会员', '0', 'H206@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '8', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (207, 'H207', '1234', '贵宾', '0', 'H207@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '4', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (208, 'H208', '1111', '游客/访客', '0', 'H208@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '2', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (209, 'H209', '$2a$10$a4q6rjHoVa7dxmMM/J6kXu9ZjrzCAHpvXQaX9cyE.AA5QVys3Qpb.', '会员', '0', 'H209@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (210, 'H210', '$2a$10$m9FuLMyP9shqglY1dEGhLOXCkln050DPVfjRm1MalXSwRPRI3aRie', '会员', '0', 'H210@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (211, 'H211', '$2a$10$hqyPxDEsf.HvGGn78MF5weKTbAgTOfoaP0okCVoKLzLM4q5qDGXvy', '会员', '0', 'H211@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '2', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (212, 'H212', '$2a$10$W3mvhaZggxt/Lewmmh4z5OkjJNmLCiuUmv8Y2LUnfZiz2Zxnk3m0a', '会员', '0', 'H212@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (213, 'H213', '$2a$10$e.9gtPzJQ0wbsDxWygbIzeGtFMScch2A54Jg2yNToJdvt7Idm5/be', '会员', '0', 'H213@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (214, 'H214', '$2a$10$rtePgKBd5jYVl6yBhAV0R.r9wI2Yx2KJ7CyOXTH9FmucurdmVLfLW', '会员', '0', 'H214@qq.com', '2147483647', '1', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '0', '1555470416934948878', '20220901 11:39:38', 1, '20220901 11:39:38', '0');
+INSERT INTO `hzh_user` VALUES (215, 'H215', '$2a$10$rtePgKBd5jYVl6yBhAV0R.r9wI2Yx2KJ7CyOXTH10FmucurdmVLfLW', '会员', '0', 'H215@qq.com', '2147483648', '2', 'https://cdn.sunofbeaches.com/images/default_avatar.png', 'member', '1', '1555470416934948878', '20220901 14:53:35', 1, '20220901 14:53:35', '0');
+
+-- ----------------------------
+-- Table structure for hzh_user_token
+-- ----------------------------
+DROP TABLE IF EXISTS `hzh_user_token`;
+CREATE TABLE `hzh_user_token`  (
+                                   `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
+                                   `user_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ID',
+                                   `token_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'token的',
+                                   `refresh_token` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '刷新token',
+                                   `login_from` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录来源',
+                                   `app_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '应用ID',
+                                   `create_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+                                   `update_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间'
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of hzh_user_token
+-- ----------------------------
+INSERT INTO `hzh_user_token` VALUES ('1558012986030297090', '30', 'a7b004ac77e7cbee420259a7dcc4922f', 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzMCIsImlhdCI6MTY2MDI5NDIxNywiZXhwIjoxNjYyODg2MjE3fQ.6kcJf4xuKg6ugb9vOFtrnuXkiNDoexxE1aW0FppZMw0', NULL, NULL, '202208121644', NULL);
+
+-- ----------------------------
+-- Table structure for palyer_info
+-- ----------------------------
+DROP TABLE IF EXISTS `palyer_info`;
+CREATE TABLE `palyer_info`  (
+                                `palyer_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                `team_id` bigint NOT NULL COMMENT '球员所属球队id',
+                                `palyer_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NULL' COMMENT '球员名称',
+                                `player_age` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员年龄',
+                                `player_sex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员性别',
+                                `palyer_height` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员身高',
+                                `player_weight` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员体重',
+                                `player_num` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员队服号码',
+                                `player_nationality` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员国籍',
+                                `player_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '球员位置',
+                                PRIMARY KEY (`palyer_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '球员表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of palyer_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for payment_info
 -- ----------------------------
 DROP TABLE IF EXISTS `payment_info`;
 CREATE TABLE `payment_info`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_sn` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单号（对外业务号）',
-  `order_id` bigint NULL DEFAULT NULL COMMENT '订单id',
-  `alipay_trade_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付宝交易流水号',
-  `total_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '支付总金额',
-  `subject` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '交易内容',
-  `payment_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付状态； 1支付成功',
-  `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建时间',
-  `confirm_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '确认时间',
-  `callback_content` varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '回调内容',
-  `callback_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '回调时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                 `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                 `order_sn` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单号（对外业务号）',
+                                 `order_id` bigint NULL DEFAULT NULL COMMENT '订单id',
+                                 `alipay_trade_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付宝交易流水号',
+                                 `total_amount` decimal(18, 4) NULL DEFAULT NULL COMMENT '支付总金额',
+                                 `subject` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '交易内容',
+                                 `payment_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付状态； 1支付成功',
+                                 `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建时间',
+                                 `confirm_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '确认时间',
+                                 `callback_content` varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '回调内容',
+                                 `callback_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '回调时间',
+                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '支付信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -7844,18 +7979,38 @@ INSERT INTO `payment_info` VALUES (1, '1', 1, 'ZFB466161', 178.0000, '排球比�
 -- ----------------------------
 DROP TABLE IF EXISTS `refund_order_info`;
 CREATE TABLE `refund_order_info`  (
-  `refund_id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_return_id` bigint NULL DEFAULT NULL COMMENT '退款的订单',
-  `refund` decimal(18, 4) NULL DEFAULT NULL COMMENT '退款金额',
-  `refund_sn` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '退款交易流水号',
-  `refund_status` tinyint(1) NULL DEFAULT NULL COMMENT '退款状态',
-  `refund_channel` tinyint NULL DEFAULT NULL COMMENT '退款渠道[1-支付宝，2-微信，3-银联，4-汇款]',
-  `refund_content` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`refund_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '退款信息' ROW_FORMAT = Dynamic;
+                                      `refund_id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                      `order_return_id` bigint NULL DEFAULT NULL COMMENT '退款的订单',
+                                      `refund` decimal(18, 4) NULL DEFAULT NULL COMMENT '退款金额',
+                                      `refund_sn` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '退款交易流水号',
+                                      `refund_status` tinyint(1) NULL DEFAULT NULL COMMENT '退款状态',
+                                      `refund_channel` tinyint NULL DEFAULT NULL COMMENT '退款渠道[1-支付宝，2-微信，3-银联，4-汇款]',
+                                      `refund_content` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                      PRIMARY KEY (`refund_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '退款信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of refund_order_info
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for test
+-- ----------------------------
+DROP TABLE IF EXISTS `test`;
+CREATE TABLE `test`  (
+                         `id` int NOT NULL,
+                         `week` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                         `temperature` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '温度',
+                         PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of test
+-- ----------------------------
+INSERT INTO `test` VALUES (1, '1', '35');
+INSERT INTO `test` VALUES (2, '2', '34');
+INSERT INTO `test` VALUES (3, '3', '31');
+INSERT INTO `test` VALUES (4, '4', '25');
+INSERT INTO `test` VALUES (5, '5', '36');
 
 SET FOREIGN_KEY_CHECKS = 1;
