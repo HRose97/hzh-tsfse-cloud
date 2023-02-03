@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.enums.ResultEnum;
-import com.hzh.common.pojo.ChinaCity;
 import com.hzh.common.pojo.GlobalLocation;
 import com.hzh.common.pojo.vo.ResultVO;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.event.service.GlobalLocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -34,13 +33,13 @@ public class GlobalLocationController {
     private GlobalLocationService globalLocationService;
 
     @GetMapping("/globalLocation/getAllGlobalLocation")
-    public R getAllGlobalLocation(@RequestParam("current")String current, @RequestParam("size")String size) {
+    public Result getAllGlobalLocation(@RequestParam("current")String current, @RequestParam("size")String size) {
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<GlobalLocation> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<GlobalLocation> eventInfoIPage = globalLocationService.selectPage(page);
-            return R.SUCCESS("查询成功",eventInfoIPage);
+            return Result.SUCCESS("查询成功",eventInfoIPage);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 

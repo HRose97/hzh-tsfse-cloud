@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import java.util.Map;
  */
 public interface HzhUserService {
 
-    R sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception;
+    Result sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception;
 
     int addUser(HzhUser hzhUser);
 
@@ -26,15 +25,15 @@ public interface HzhUserService {
 
     HzhUser findByEmail(String email);
 
-    R login(LoginVo loginVo, String verification) throws Exception;
+    Result login(LoginVo loginVo, String verification) throws Exception;
 
     HzhUser findByPhoneNum(String phonenumber);
 
-    R chechToken() throws Exception;
+    Result chechToken() throws Exception;
 
-    R logout() throws Exception;
+    Result logout() throws Exception;
 
-    R reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
+    Result reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception;
 
     IPage<HzhUser> getMemberUserByPage(Page<HzhUser> page);
 
@@ -44,13 +43,13 @@ public interface HzhUserService {
 
     boolean delUserById(long id, String delFlag,String updateDate);
 
-    R reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception;
+    Result reSetPasswordByAdmin(String id, ReSetPasswordVo reSetPasswordVo) throws Exception;
 
-    R registerUser(String mailCode, HzhUser hzhUser) throws Exception;
+    Result registerUser(String mailCode, HzhUser hzhUser) throws Exception;
 
-    R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception;
+    Result sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception;
 
-    R initAdminAccount(HzhUser hzhUser);
+    Result initAdminAccount(HzhUser hzhUser);
 
     IPage<HzhUser> selectListByFilter(Page<HzhUser> page, HzhUser hzhUser);
 

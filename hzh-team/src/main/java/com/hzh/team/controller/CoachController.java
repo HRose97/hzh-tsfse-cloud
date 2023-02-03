@@ -5,9 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.CoachInfo;
-import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.ResultVO;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.feign.clients.EventClient;
 import com.hzh.team.service.CoachService;
@@ -83,13 +82,13 @@ public class CoachController {
 
     //教练分页查询
     @GetMapping("/coach/getAllCoachByPage")
-    public R getAllUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
+    public Result getAllUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<CoachInfo> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<CoachInfo> coachInfo = coachService.findAllByPage(page);
-            return R.SUCCESS("查询成功",coachInfo);
+            return Result.SUCCESS("查询成功",coachInfo);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 

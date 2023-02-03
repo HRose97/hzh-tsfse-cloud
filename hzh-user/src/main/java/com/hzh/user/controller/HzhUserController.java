@@ -4,7 +4,7 @@ package com.hzh.user.controller;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.vo.LoginVo;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.user.service.HzhUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +40,8 @@ public class HzhUserController {
      * @return
      **/
     @GetMapping("/register/emailCode")
-    public R sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
-                               @RequestParam("email") String emailAddress) throws Exception {
+    public Result sendRegisterEmail(@RequestParam(value = "verification",required = false)String verification,
+                                    @RequestParam("email") String emailAddress) throws Exception {
         return hzhUserService.sendEmailCode(verification,emailAddress,false);
 
     }
@@ -55,8 +55,8 @@ public class HzhUserController {
      * @return
      **/
     @GetMapping("/forget/emailCode")
-    public R sendReSetPasswordEmail(@RequestParam(value = "verification",required = false)String verification,
-                               @RequestParam("email") String emailAddress) throws Exception {
+    public Result sendReSetPasswordEmail(@RequestParam(value = "verification",required = false)String verification,
+                                         @RequestParam("email") String emailAddress) throws Exception {
         return hzhUserService.sendReSetPasswordEmail(verification,emailAddress,false);
 
     }
@@ -69,7 +69,7 @@ public class HzhUserController {
      * @throws Exception
      */
     @PostMapping("/user/register")
-    public R registerUser(@RequestParam(value = "mailCode",required = false)String mailCode, @RequestBody HzhUser hzhUser) throws Exception {
+    public Result registerUser(@RequestParam(value = "mailCode",required = false)String mailCode, @RequestBody HzhUser hzhUser) throws Exception {
         return hzhUserService.registerUser(mailCode,hzhUser);
     }
 
@@ -82,26 +82,26 @@ public class HzhUserController {
       * @return 
       **/
      @PostMapping("/user/login")
-      public R userLogin(@RequestBody LoginVo loginVo, @RequestParam("verification")String  verification) throws Exception {
+      public Result userLogin(@RequestBody LoginVo loginVo, @RequestParam("verification")String  verification) throws Exception {
          return hzhUserService.login(loginVo,verification);
      }
 
      //解析Token
      @GetMapping("/user/checkToken")
-     public R checkToken() throws Exception {
+     public Result checkToken() throws Exception {
          return hzhUserService.chechToken();
      }
 
      //退出登录
      @GetMapping("/user/logout")
-     public R loginOut() throws Exception {
+     public Result loginOut() throws Exception {
          return hzhUserService.logout();
      }
 
     //修改密码   用户自己修改
     @PutMapping("/user/reSetPasswordBySelf")
-    public R reRendEmail(@RequestParam(value = "mailCode",required = false)String mailCode,
-                         @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public Result reRendEmail(@RequestParam(value = "mailCode",required = false)String mailCode,
+                              @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
         return  hzhUserService.reSetPasswordBySelf(mailCode,reSetPasswordVo);
     }
 

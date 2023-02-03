@@ -15,7 +15,7 @@ import lombok.Data;
  * @since 2022/8/11 14:25
  */
 @Data
-public class R {
+public class Result {
 
     public static final int CODE_SUCCESS = 20000;
     public static final int CODE_FAILED = 40000;
@@ -32,28 +32,28 @@ public class R {
 
 
     //提供一些静态的方法，可以快速的创建返回对象
-    public static R SUCCESS(String msg){
-        R r = new R();
+    public static Result SUCCESS(String msg){
+        Result r = new Result();
         r.code = CODE_SUCCESS;
         r.msg = msg;
         r.success = true;
         return r;
     }
 
-    public static R SUCCESS(String msg,Object data){
-        R success = SUCCESS(msg);
+    public static Result SUCCESS(String msg, Object data){
+        Result success = SUCCESS(msg);
         success.data = data;
         return success;
     }
 
-    public static R NOT_LOGIN(){
-        R filed = FAILED("账号未登录");
+    public static Result NOT_LOGIN(){
+        Result filed = FAILED("账号未登录");
         filed.code = CODE_NOT_LOGIN;
         return filed;
     }
 
-    public static R FAILED(String msg){
-        R r = new R();
+    public static Result FAILED(String msg){
+        Result r = new Result();
         r.code = CODE_FAILED;
         r.msg = msg;
         r.success = false;
@@ -61,8 +61,8 @@ public class R {
     }
 
 
-    public static R FAILED(String msg, Object data){
-        R success = SUCCESS(msg);
+    public static Result FAILED(String msg, Object data){
+        Result success = SUCCESS(msg);
         success.data = data;
         return success;
     }

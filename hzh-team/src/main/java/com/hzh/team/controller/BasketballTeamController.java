@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzh.common.pojo.BasketballTeamInfo;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.team.service.BasketballTeamInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,13 +30,13 @@ public class BasketballTeamController {
 
     //分页查询
     @GetMapping("/bastball/getAllbastballByPage")
-    public R getAllUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
+    public Result getAllUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<BasketballTeamInfo> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<BasketballTeamInfo> coachInfo = teamInfoService.findAllByPage(page);
-            return R.SUCCESS("查询成功",coachInfo);
+            return Result.SUCCESS("查询成功",coachInfo);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 }

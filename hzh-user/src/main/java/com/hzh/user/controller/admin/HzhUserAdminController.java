@@ -10,7 +10,7 @@ import com.hzh.common.pojo.HzhUser;
 import com.alibaba.excel.ExcelWriter;
 import com.hzh.common.pojo.vo.ReSetPasswordVo;
 import com.hzh.common.pojo.vo.ResultVO;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.user.service.HzhUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,44 +40,44 @@ public class HzhUserAdminController {
 
     //重置密码  管理员重置
     @GetMapping("/user/reSetPasswordByAdmin")
-    public R reSetPasswordByAdmin(@RequestParam(value = "id")String id,
-                                         @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public Result reSetPasswordByAdmin(@RequestParam(value = "id")String id,
+                                       @RequestBody ReSetPasswordVo reSetPasswordVo) throws Exception {
         return hzhUserService.reSetPasswordByAdmin(id,reSetPasswordVo);
     }
 
     //分页查询非系统用户
     @GetMapping("/user/getAllUserByPage")
-    public R getMemberUserByPage(@RequestParam("current")String current,@RequestParam("size")String size){
+    public Result getMemberUserByPage(@RequestParam("current")String current, @RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<HzhUser> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<HzhUser> hzhUserIPage = hzhUserService.getMemberUserByPage(page);
-            return R.SUCCESS("查询成功",hzhUserIPage);
+            return Result.SUCCESS("查询成功",hzhUserIPage);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 
 
     //分页查询非系统用户
     @GetMapping("/user/adminUserList")
-    public R adminUserList(@RequestParam("current")String current,@RequestParam("size")String size){
+    public Result adminUserList(@RequestParam("current")String current, @RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<HzhUser> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<HzhUser> hzhUserIPage = hzhUserService.adminUserList(page);
-            return R.SUCCESS("查询成功",hzhUserIPage);
+            return Result.SUCCESS("查询成功",hzhUserIPage);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 
     //TODO 待完善  查询语句有问题
     @GetMapping("/user/getUserInfoByFilter")
-    public R getUserInfoByFilter(@RequestParam(value = "phone")String phone,
-                                 @RequestParam(value = "email")String email,
-                                 @RequestParam(value = "userName")String userName,
-                                 @RequestParam(value = "level")String level,
-                                 @RequestParam(value = "userType")String userType,
-                                 @RequestParam(value = "status")String status
+    public Result getUserInfoByFilter(@RequestParam(value = "phone")String phone,
+                                      @RequestParam(value = "email")String email,
+                                      @RequestParam(value = "userName")String userName,
+                                      @RequestParam(value = "level")String level,
+                                      @RequestParam(value = "userType")String userType,
+                                      @RequestParam(value = "status")String status
                                  ){
         // 根据用户名
         // 根据邮箱
@@ -94,12 +94,12 @@ public class HzhUserAdminController {
         Page<HzhUser> page = new Page<>(0, 10);
         IPage<HzhUser> hzhUserIPage = hzhUserService.selectListByFilter(page,hzhUser);
         System.out.println(hzhUserIPage);
-        return R.SUCCESS("查询成功",hzhUserIPage);
+        return Result.SUCCESS("查询成功",hzhUserIPage);
     }
 
     //禁用用户
     @GetMapping("/user/disableUserById")
-    public R disableUserById(@RequestParam("id")String id,@RequestParam("status")String status){
+    public Result disableUserById(@RequestParam("id")String id, @RequestParam("status")String status){
         String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
         if (status.equals("0")){
             status = "1";
@@ -112,15 +112,15 @@ public class HzhUserAdminController {
                 //0 启用  1禁用  要在未删除的情况下   0未删除  1删除
                 boolean updateState = hzhUserService.updateByState(Long.parseLong(id),status,updateDate);
                 if (updateState){
-                    return R.SUCCESS("禁用成功");
+                    return Result.SUCCESS("禁用成功");
                 }else {
-                    return R.FAILED("禁用失败");
+                    return Result.FAILED("禁用失败");
                 }
             }else {
-                return R.FAILED("参数校验出错");
+                return Result.FAILED("参数校验出错");
             }
         }else {
-            return R.FAILED("参数校验出错");
+            return Result.FAILED("参数校验出错");
         }
     }
 
@@ -148,20 +148,20 @@ public class HzhUserAdminController {
 
     //管理员初始化
     @PutMapping("/user/initAdminAccount")
-    public R initAdminAccount(@RequestBody HzhUser hzhUser){
+    public Result initAdminAccount(@RequestBody HzhUser hzhUser){
         //TODO P66觉得没有必要初始化  有必要时在做
         return null;
     }
 
     //系统管理员单个新增用户
     @PostMapping("/user/addUserInfo")
-    public R addUserInfo(@RequestBody HzhUser hzhUser){
+    public Result addUserInfo(@RequestBody HzhUser hzhUser){
         System.out.println("HHH ===> " + hzhUser);
         int i = hzhUserService.addUserByAdmin(hzhUser);
         if (i > 0){
-            return R.SUCCESS("新增成功");
+            return Result.SUCCESS("新增成功");
         }else {
-            return R.FAILED("新增失败");
+            return Result.FAILED("新增失败");
         }
     }
 
@@ -173,21 +173,21 @@ public class HzhUserAdminController {
      * @throws IOException
      */
     @PostMapping("/user/import")
-    public R importData(@RequestBody MultipartFile file) throws Exception {
+    public Result importData(@RequestBody MultipartFile file) throws Exception {
         Map map = hzhUserService.uploadExcel(file);
         if (map.get("code").equals("1")){
-            return R.SUCCESS("导入成功");
+            return Result.SUCCESS("导入成功");
         }else if (map.get("code").equals("2")){
             //已经存在
-            return R.FAILED(map.get("msg").toString());
+            return Result.FAILED(map.get("msg").toString());
         }else {
-            return R.FAILED("导入失败");
+            return Result.FAILED("导入失败");
         }
     }
 
     //导出文件到本地
     @GetMapping("/user/ouPuttEcexl")
-    public R ouPuttEcexl(){
+    public Result ouPuttEcexl(){
         boolean flag = false;
         try {
             String path = "E:\\tsfse\\user\\user.xlsx";
@@ -198,10 +198,10 @@ public class HzhUserAdminController {
             excelWriter.write(all,build1);
             excelWriter.finish();
             System.out.println("导出成功 ：" + path);
-            return R.SUCCESS("导出成功");
+            return Result.SUCCESS("导出成功");
         }catch (Exception e){
             log.error("另一个程序正在使用此文件，进程无法访问");
-            return R.FAILED("另一个程序正在使用此文件，进程无法访问");
+            return Result.FAILED("另一个程序正在使用此文件，进程无法访问");
         }
     }
 }

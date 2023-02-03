@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.EventInfo;
 import com.hzh.common.pojo.vo.ResultVO;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.common.utils.RedisKeyUtil;
 import com.hzh.common.utils.RedisUtils;
 import com.hzh.event.service.EventInfoService;
@@ -42,13 +42,13 @@ public class EventInfoController {
 
 
     @GetMapping("/eventInfo/getAllEvent")
-    public R getAllEvent(@RequestParam("current")String current, @RequestParam("size")String size) {
+    public Result getAllEvent(@RequestParam("current")String current, @RequestParam("size")String size) {
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<EventInfo> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<EventInfo> eventInfoIPage = eventInfoService.selectPage(page);
-            return R.SUCCESS("查询成功",eventInfoIPage);
+            return Result.SUCCESS("查询成功",eventInfoIPage);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 

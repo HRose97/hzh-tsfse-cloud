@@ -1,7 +1,6 @@
 package com.hzh.user.service.impl;
 
 import com.hzh.user.utils.ExcelUtils;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.anji.captcha.model.common.RepCodeEnum;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
@@ -15,7 +14,7 @@ import com.hzh.common.mapper.HzhUserTokenMapper;
 import com.hzh.common.pojo.HzhUser;
 import com.hzh.common.pojo.HzhUserToken;
 import com.hzh.common.pojo.vo.*;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.common.service.BaseService;
 import com.hzh.common.utils.*;
 import com.hzh.user.service.HzhUserService;
@@ -72,7 +71,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     //新用户发送邮箱验证码
     @Override
-    public R sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception {
+    public Result sendEmailCode(String verification, String emailAddress, boolean mustRegister) throws Exception {
         String date = DateUtils.getCurrent(DateUtils.ticketPattern);
         log.info("String verfication ===> " +  verification);
 
@@ -91,9 +90,9 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             //repCode  6111  验证失败
             //repCode  6112  获取验证码失败,请联系管理员
             if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
-                return R.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+                return Result.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
             }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
-                return R.FAILED("图灵码验证失败");
+                return Result.FAILED("图灵码验证失败");
             }
         }
 
@@ -101,13 +100,13 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         //检查数据是否正确
         if (TextUtils.isEmpty(emailAddress)) {
             //不可以为空
-            return R.FAILED("邮箱地址不可以为空");
+            return Result.FAILED("邮箱地址不可以为空");
         }
         //对邮箱地址校验
         boolean isEmailTrue = FormatCheckUtils.isEmail(emailAddress);
         if (!isEmailTrue){
             //邮箱格式不正确
-            return R.FAILED("邮箱格式不正确，请检查邮箱格式");
+            return Result.FAILED("邮箱格式不正确，请检查邮箱格式");
         }
 
         //ip地址  继承关系可以直接使用方法
@@ -122,7 +121,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             int i = Integer.parseInt(ipKeyTimes);
             log.info("当前ip{}调用了{}次",remoteAddr,i);
             if (i > 100){
-                return R.FAILED("请不要通过此ip"+remoteAddr+"频繁发送");
+                return Result.FAILED("请不要通过此ip"+remoteAddr+"频繁发送");
             }else {
                 i++;
                 //2  时间数量   TimeUnit.HOURS 时间单位
@@ -141,7 +140,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             log.info("当前邮箱{}已经调用了{}次",emailAddress,i);
             //TODO 次数是属于配置项 一般都不是写死得 需要抽取出来到可配置得地方
             if (i > 100){
-                return R.FAILED("请不要通过此邮箱账号"+emailAddress+"频繁发送");
+                return Result.FAILED("请不要通过此邮箱账号"+emailAddress+"频繁发送");
             }else {
                 i++;
                 //2  时间数量   TimeUnit.HOURS 时间单位
@@ -165,12 +164,12 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         //TODO  实际注册时放开  发送验证码
         //EmailSender.sendEmailSendCode(emailAddress, "注册验证码："+ mailCode +",5分钟内有效！");
 
-        return R.SUCCESS("邮箱验证发送成功");
+        return Result.SUCCESS("邮箱验证发送成功");
     }
 
     //找回密码发送邮箱验证码
     @Override
-    public R sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception {
+    public Result sendReSetPasswordEmail(String verification, String emailAddress, boolean mustRegister) throws Exception {
         String date = DateUtils.getCurrent(DateUtils.ticketPattern);
         log.info("String verfication ===> " +  verification);
 
@@ -189,9 +188,9 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             //repCode  6111  验证失败
             //repCode  6112  获取验证码失败,请联系管理员
             if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())){
-                return R.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+                return Result.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
             }else if(repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())){
-                return R.FAILED("图灵码验证失败");
+                return Result.FAILED("图灵码验证失败");
             }
         }
 
@@ -199,13 +198,13 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         //检查数据是否正确
         if (TextUtils.isEmpty(emailAddress)) {
             //不可以为空
-            return R.FAILED("邮箱地址不可以为空");
+            return Result.FAILED("邮箱地址不可以为空");
         }
         //对邮箱地址校验
         boolean isEmailTrue = FormatCheckUtils.isEmail(emailAddress);
         if (!isEmailTrue){
             //邮箱格式不正确
-            return R.FAILED("邮箱格式不正确，请检查邮箱格式");
+            return Result.FAILED("邮箱格式不正确，请检查邮箱格式");
         }
         //mustRegister 不管是trut or false 都要对邮箱进行检查是否存在
         QueryWrapper<HzhUser> queryWrapper = new QueryWrapper<>();
@@ -213,10 +212,10 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         queryWrapper.select("id");
         HzhUser selectOne = hzhUserMapper.selectOne(queryWrapper);
         if (selectOne != null && mustRegister){
-            return R.FAILED("该邮箱已经注册");
+            return Result.FAILED("该邮箱已经注册");
         }
         if (selectOne == null && !mustRegister){
-            return R.FAILED("该邮箱未注册");
+            return Result.FAILED("该邮箱未注册");
         }
 
 
@@ -232,7 +231,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             int i = Integer.parseInt(ipKeyTimes);
             log.info("当前ip{}调用了{}次",remoteAddr,i);
             if (i > 100){
-                return R.FAILED("请不要通过此ip"+remoteAddr+"频繁发送");
+                return Result.FAILED("请不要通过此ip"+remoteAddr+"频繁发送");
             }else {
                 i++;
                 //2  时间数量   TimeUnit.HOURS 时间单位
@@ -251,7 +250,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             log.info("当前邮箱{}已经调用了{}次",emailAddress,i);
             //TODO 次数是属于配置项 一般都不是写死得 需要抽取出来到可配置得地方
             if (i > 100){
-                return R.FAILED("请不要通过此邮箱账号"+emailAddress+"频繁发送");
+                return Result.FAILED("请不要通过此邮箱账号"+emailAddress+"频繁发送");
             }else {
                 i++;
                 //2  时间数量   TimeUnit.HOURS 时间单位
@@ -275,7 +274,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         //TODO  实际注册时放开  发送验证码
         //EmailSender.sendEmailSendCode(emailAddress, "注册验证码："+ mailCode +",5分钟内有效！");
 
-        return R.SUCCESS("邮箱验证发送成功");
+        return Result.SUCCESS("邮箱验证发送成功");
     }
 
     //注册用户
@@ -314,12 +313,12 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     //解析token
     @Override
-    public R chechToken() throws Exception {
+    public Result chechToken() throws Exception {
         //先是拿到tokenkey
         String tokenKey = CookieUtils.getCookie(getRequest(), Constants.User.TSFSE_TOKEN);
         if (StringUtils.isEmpty(tokenKey)){
             //如果为空 账号为登录
-            return R.NOT_LOGIN();
+            return Result.NOT_LOGIN();
         }
         //去rendis中拿数据 拿token 有可能超过2H
         String token = redisUtils.get(Constants.User.KEY_TOKEN + tokenKey);
@@ -327,14 +326,14 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
         String saltKey = redisKeyUtil.mkUserTokenSaltKey(tokenKey);
         String salt = redisUtils.get(saltKey);
         if (StringUtils.isEmpty(salt)) {
-            return R.FAILED("账号未登录");
+            return Result.FAILED("账号未登录");
         }
         if (!StringUtils.isEmpty(token)){
             //有的话解析token
             try{
                 Claims claims = JwtUtil.parseJWT(token, salt);
                 UserVo userVo = ClaimsUtils.claims2toUser(claims);
-                return R.SUCCESS("已登录",userVo);
+                return Result.SUCCESS("已登录",userVo);
             }catch (Exception e){
                 e.printStackTrace();
                 log.error("token 解析异常");
@@ -349,10 +348,10 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
     //退出登录
     @Override
-    public R logout() throws Exception {
+    public Result logout() throws Exception {
         String tokenkey = CookieUtils.getCookie(getRequest(), cookieTokenName);
         if (StringUtils.isEmpty(tokenkey)){
-            return R.NOT_LOGIN();
+            return Result.NOT_LOGIN();
         }else {
             //删除token
             redisUtils.delete(Constants.User.KEY_TOKEN + tokenkey);
@@ -364,12 +363,12 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
             CookieUtils.setUpCookie(getResponse(),Constants.User.TSFSE_TOKEN,"");
             //删除redis中的盐值
             redisUtils.delete(Constants.User.KEY_TOKEN + tokenkey);
-            return R.SUCCESS("退出登录成功");
+            return Result.SUCCESS("退出登录成功");
         }
     }
 
     //让用户强制下线
-    public R logoutById(String userId) throws Exception {
+    public Result logoutById(String userId) throws Exception {
 /*        //可以通过userId 到refreshToken的表中查询到相关数据，然后退出登录
         QueryWrapper queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);
@@ -401,7 +400,7 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
      * @param tokenKey
      * @return
      */
-    private R chechResfreshToken(String tokenKey, String salt) {
+    private Result chechResfreshToken(String tokenKey, String salt) {
         QueryWrapper queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("token_key",tokenKey);
         queryWrapper.select("refresh_token","user_id");
@@ -425,18 +424,18 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 userVo.setPhonenumber(hzhUser.getPhonenumber());
                 userVo.setStatus(hzhUser.getStatus());
                 createToken(hzhUser);
-                return R.SUCCESS("已登录",userVo);
+                return Result.SUCCESS("已登录",userVo);
             }catch (Exception e){
                 e.printStackTrace();
                 //过期就是未登录
             }
         }
-        return R.NOT_LOGIN();
+        return Result.NOT_LOGIN();
     }
 
     //登录
     @Override
-    public R login(LoginVo loginUser, String verification) throws Exception {
+    public Result login(LoginVo loginUser, String verification) throws Exception {
         log.info("hzhUser ===> " + loginUser);
         log.info("verification ===> " + verification);
 
@@ -459,32 +458,32 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
             //没有具体说明是什么异常
             if (repCode != null && repCode.equals(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getCode())) {
-                return R.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
+                return Result.SUCCESS(RepCodeEnum.API_CAPTCHA_COORDINATE_ERROR.getDesc());
             } else if (repCode == null || !repCode.equals(RepCodeEnum.SUCCESS.getCode())) {
-                return R.FAILED("图灵码验证失败");
+                return Result.FAILED("图灵码验证失败");
             }
 
             //校验数据
             String userName = loginUser.getUserName();
             if (StringUtils.isEmpty(userName)) {
-                return R.FAILED("账号不可以为空");
+                return Result.FAILED("账号不可以为空");
             }
 
             //对密码校验，前端传递来的密码不可能为明文传递通过MD5加密
             String password = loginUser.getPassword();
             if (StringUtils.isEmpty(password)) {
-                return R.FAILED("密码不可以为空");
+                return Result.FAILED("密码不可以为空");
             }
             if (password.length() != 32) {
-                return R.FAILED("请使用MD5摘要对密码进行转换");
+                return Result.FAILED("请使用MD5摘要对密码进行转换");
             }
 
             //根据用户名、手机号、邮箱进行查询 用户
             HzhUser hasHzhUser = hzhUserMapper.selectOneByUserName(loginUser.getUserName());
             if (hasHzhUser == null) {
-                return R.FAILED("账号不存在");
+                return Result.FAILED("账号不存在");
             } else if (hasHzhUser.getStatus().equals("1")) {
-                return R.FAILED("账号已经被禁用");
+                return Result.FAILED("账号已经被禁用");
             } else {
                 //如果用户存在并且未被禁用
                 //前端密码经过加密后再次经过passwordEncoder 加密后存入库中
@@ -494,13 +493,13 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                     UserVo userVo = new UserVo();
                     userVo.setAvatar(hasHzhUser.getAvatar());
                     userVo.setUserName(hasHzhUser.getUserName());
-                    return R.SUCCESS("登录成功",userVo);
+                    return Result.SUCCESS("登录成功",userVo);
                 } else {
-                    return R.FAILED("用户名或密码错误");
+                    return Result.FAILED("用户名或密码错误");
                 }
             }
         }
-        return R.FAILED("图灵码验证失败");
+        return Result.FAILED("图灵码验证失败");
     }
 
      /**
@@ -609,34 +608,34 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
      * @return
      */
     @Override
-    public R reSetPasswordByAdmin(String id,ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public Result reSetPasswordByAdmin(String id, ReSetPasswordVo reSetPasswordVo) throws Exception {
         String updateDate = DateUtils.getCurrent(DateUtils.dateFullPattern);
 
         HzhUser hzhUser = hzhUserMapper.selectById(id);
         if (hzhUser != null){
             if (StringUtils.isEmpty(reSetPasswordVo.getPassword()) || reSetPasswordVo.getPassword().length() != 32){
-                return R.FAILED("密码校验出错");
+                return Result.FAILED("密码校验出错");
             }else {
                 String encode = bCryptPasswordEncoder.encode(reSetPasswordVo.getPassword());
                 boolean b = hzhUserMapper.reSetPasswordByAdmin(Long.parseLong(id), updateDate, encode);
                 if (b){
-                    R r = logoutById(id);
-                    return R.SUCCESS("密码重置成功",r);
+                    Result r = logoutById(id);
+                    return Result.SUCCESS("密码重置成功",r);
                 }else {
-                    return R.FAILED("密码重置失败");
+                    return Result.FAILED("密码重置失败");
                 }
             }
         }else {
-            return R.FAILED("账号不存在");
+            return Result.FAILED("账号不存在");
         }
     }
 
     //用户自身修改密码
     @Override
-    public R reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
+    public Result reSetPasswordBySelf(String mailCode, ReSetPasswordVo reSetPasswordVo) throws Exception {
 
         if (StringUtils.isEmpty(mailCode) || reSetPasswordVo == null){
-            return R.FAILED("参数不可以为空");
+            return Result.FAILED("参数不可以为空");
         }else {
             QueryWrapper queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("email",reSetPasswordVo.getEmail());
@@ -652,27 +651,27 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                     if (update){
                         //跟新成功以后退出登录
                         logout();
-                        return R.SUCCESS("密码修改成功");
+                        return Result.SUCCESS("密码修改成功");
                     }else {
-                        return R.FAILED("密码修改失败");
+                        return Result.FAILED("密码修改失败");
                     }
                 }else {
-                    return R.FAILED("验证码错误");
+                    return Result.FAILED("验证码错误");
                 }
             }else {
-                return R.FAILED("该邮箱未查询到用户");
+                return Result.FAILED("该邮箱未查询到用户");
             }
         }
     }
 
     //用户注册
     @Override
-    public R registerUser(String mailCode, HzhUser hzhUser) throws Exception {
+    public Result registerUser(String mailCode, HzhUser hzhUser) throws Exception {
         String currentdate = DateUtils.getCurrent(DateUtils.dateFullPattern);
 
         //判断邮箱是否以已经注册 是否为空
         if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isEmpty(hzhUser.getEmail())){
-            return R.FAILED("注册邮箱不可以为空");
+            return Result.FAILED("注册邮箱不可以为空");
         }
         //根据用户名、手机号、邮箱进行查询
         QueryWrapper<HzhUser> queryWrapper = new QueryWrapper<>();
@@ -681,30 +680,30 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
                 .or().eq("phonenumber",hzhUser.getPhonenumber());
         HzhUser hasHzhUser = hzhUserMapper.selectOne(queryWrapper);
         if (hasHzhUser != null && hasHzhUser.getEmail().equals(hzhUser.getEmail())){
-            return R.FAILED("该邮箱已注册");
+            return Result.FAILED("该邮箱已注册");
         }
         // 判断用户名是否被使用
         if (hasHzhUser != null && hasHzhUser.getUserName().equals(hzhUser.getUserName())){
-            return R.FAILED("用户名已存在");
+            return Result.FAILED("用户名已存在");
         }
         //对手机号进行判断
         boolean isPhone = FormatCheckUtils.isMobile(hzhUser.getPhonenumber());
         if (!isPhone ){
-            return R.FAILED("手机号格式错误");
+            return Result.FAILED("手机号格式错误");
         }
         if (hasHzhUser != null){
-            return R.FAILED("该手机号已注册");
+            return Result.FAILED("该手机号已注册");
         }
         //判断验证码是否正确
         String codeRedisKey = redisKeyUtil.mkRegisterCodeRedisKey(hzhUser.getEmail());
         String redisCode = redisUtils.get(codeRedisKey);
         if ( redisCode == null || !redisCode.substring(26,32).equals(mailCode)){
-            return R.FAILED("验证码错误");
+            return Result.FAILED("验证码错误");
         }
 
         //对密码进行校验
         if (hzhUser.getPassword().length() != 32){
-            return R.FAILED("请使用MD5摘要算法进行转换");
+            return Result.FAILED("请使用MD5摘要算法进行转换");
         }
 
         HzhUser hzhUserInsert = new HzhUser();
@@ -728,15 +727,15 @@ public class HzhUserServiceImpl extends BaseService implements HzhUserService {
 
         int add = hzhUserMapper.insert(hzhUserInsert);
         if(add == 1){
-            return R.SUCCESS("用户注册成功");
+            return Result.SUCCESS("用户注册成功");
         }else {
-            return R.FAILED("用户注册失败");
+            return Result.FAILED("用户注册失败");
         }
     }
 
     //创建超级管理员
     @Override
-    public R initAdminAccount(HzhUser hzhUser) {
+    public Result initAdminAccount(HzhUser hzhUser) {
         return null;
     }
 

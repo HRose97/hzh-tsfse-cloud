@@ -3,11 +3,8 @@ package com.hzh.order.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzh.common.enums.ResultEnum;
 import com.hzh.common.pojo.HzhOrder;
-import com.hzh.common.pojo.HzhUser;
-import com.hzh.common.pojo.vo.ResultVO;
-import com.hzh.common.respone.R;
+import com.hzh.common.respone.Result;
 import com.hzh.common.utils.DateUtils;
 import com.hzh.common.utils.RedisKeyUtil;
 import com.hzh.common.utils.RedisUtils;
@@ -45,19 +42,19 @@ public class OrderController {
 
     //分页查询订单信息
     @GetMapping("/orderInfo/getAllOrderByPage")
-    public R getAllOrderByPage(@RequestParam("current")String current,@RequestParam("size")String size){
+    public Result getAllOrderByPage(@RequestParam("current")String current, @RequestParam("size")String size){
         if ( !StringUtils.isEmpty(current) && !StringUtils.isEmpty(current) ){
             Page<HzhOrder> page = new Page<>(Long.parseLong(current), Long.parseLong(size));
             IPage<HzhOrder> orderByPage = orderService.getAllOrderByPage(page);
-            return R.SUCCESS("查询成功",orderByPage);
+            return Result.SUCCESS("查询成功",orderByPage);
         }else {
-            return R.FAILED("查询失败");
+            return Result.FAILED("查询失败");
         }
     }
 
 
     @PostMapping("/orderInfo/curd")
-    public R OrderCURD(@RequestBody Map map) throws Exception {
+    public Result OrderCURD(@RequestBody Map map) throws Exception {
 
 
         RedisKeyUtil redisKeyUtil = new RedisKeyUtil();
@@ -99,15 +96,15 @@ public class OrderController {
                 int size = null == map.get("size") ? 10 : Integer.parseInt(map.get("size").toString());
                 Page<HzhOrder> page = new Page<>(current, size);
                 IPage<HzhOrder> orderInfoIPage = orderService.selectPage(page);
-                return R.SUCCESS("查询成功",orderInfoIPage);
+                return Result.SUCCESS("查询成功",orderInfoIPage);
 
             case "2":
                 //根据id查询
                 HzhOrder hzhOrder = orderService.selectByOrderId(orderId);
                 if (hzhOrder != null ){
-                    return R.SUCCESS("查询成功",hzhOrder);
+                    return Result.SUCCESS("查询成功",hzhOrder);
                 }else {
-                    return R.FAILED("查询失败");
+                    return Result.FAILED("查询失败");
                 }
 
             case "3":
@@ -175,9 +172,9 @@ public class OrderController {
                 int insert = orderService.insert(orderInfoInsert);
 
                 if (insert > 0) {
-                    return R.SUCCESS("新增成功");
+                    return Result.SUCCESS("新增成功");
                 } else {
-                    return R.FAILED("新增失败");
+                    return Result.FAILED("新增失败");
                 }
 
             case "4":
@@ -211,13 +208,13 @@ public class OrderController {
                     boolean update = orderService.updateById(orderInfoUpdata);
 
                     if (update) {
-                        return R.SUCCESS("更新成功");
+                        return Result.SUCCESS("更新成功");
                     } else {
-                        return R.FAILED("更新失败");
+                        return Result.FAILED("更新失败");
                     }
                 } else {
                     log.error("根据该id未查询到数据");
-                    return R.FAILED("根据该id未查询到数据");
+                    return Result.FAILED("根据该id未查询到数据");
                 }
 
             case "5":
@@ -226,17 +223,17 @@ public class OrderController {
                     String state = null;
                     int delete = orderService.updateById(orderId, state);
                     if (delete > 0) {
-                        return R.SUCCESS("删除成功");
+                        return Result.SUCCESS("删除成功");
                     } else {
-                        return R.FAILED("删除失败");
+                        return Result.FAILED("删除失败");
                     }
                 } else {
-                    return R.FAILED("根据该id未查询到数据");
+                    return Result.FAILED("根据该id未查询到数据");
                 }
             default:
                 //查询
                 List<HzhOrder> orderInfos = orderService.selectList(null);
-                return R.SUCCESS("查询成功",orderInfos);
+                return Result.SUCCESS("查询成功",orderInfos);
         }
     }
 
